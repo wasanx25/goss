@@ -1,13 +1,24 @@
 package main
 
 import (
+	"flag"
 	"fmt"
+	"io/ioutil"
 	"os"
 
 	gc "github.com/rthornton128/goncurses"
 )
 
 func main() {
+	flag.Parse()
+	fileName := flag.Arg(0)
+	fmt.Println(fileName)
+	data, err := ioutil.ReadFile(fileName)
+	if err != nil {
+		fmt.Println("Failed reading file. err: ", err)
+		os.Exit(2)
+	}
+
 	stdscr, err := gc.Init()
 	if err != nil {
 		fmt.Println(err)
@@ -17,7 +28,9 @@ func main() {
 	gc.StartColor()
 	gc.Raw(true)
 	gc.Echo(false)
+
 	stdscr.Keypad(true)
+	stdscr.Print(string(data))
 
 loop:
 	for {
