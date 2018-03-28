@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 
+	"github.com/famz/SetLocale"
 	gc "github.com/rthornton128/goncurses"
 )
 
@@ -19,6 +20,7 @@ func main() {
 		os.Exit(2)
 	}
 
+	SetLocale.SetLocale(SetLocale.LC_ALL, "")
 	stdscr, err := gc.Init()
 	if err != nil {
 		fmt.Println(err)
