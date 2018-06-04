@@ -1,54 +1,40 @@
 package main
 
 import (
-	"flag"
 	"fmt"
-	"io/ioutil"
 	"os"
-	"strings"
 
-	"github.com/famz/SetLocale"
-	gc "github.com/rthornton128/goncurses"
+	"github.com/gdamore/tcell"
 )
 
 func main() {
-	flag.Parse()
-	fileName := flag.Arg(0)
-	data, err := ioutil.ReadFile(fileName)
-	if err != nil {
-		fmt.Println("Failed reading file. err: ", err)
-		os.Exit(2)
-	}
-	SetLocale.SetLocale(SetLocale.LC_ALL, "")
-	stdscr, err := gc.Init()
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(2)
-	}
-	defer gc.End()
-	gc.StartColor()
-	gc.Raw(true)
-	gc.Echo(false)
+	var err error
 
-	_, x := stdscr.MaxYX()
-	dataLN := strings.Count(string(data), "\n")
-	stdscr.Keypad(true)
-	stdscr.Resize(dataLN+100, x)
-	stdscr.Print(string(data))
-	stdscr.Refresh()
-	stdscr.ScrollOk(true)
+	tui, err := tcell.NewScreen()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "tcell.NewScreen() error: %s", err)
+	}
+
+	err = tui.Init()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "tui.Init() error: %s", err)
+	}
+
+	tui.SetStyle(tcell.StyleDefault.Foreground(tcell.ColorWhite).Background(tcell.ColorBlack))
+
+	tui.Show()
 
 loop:
 	for {
-		k := stdscr.GetChar()
-		switch byte(k) {
-		case 'j':
-			stdscr.Scroll(1)
-		case 'k':
-			stdscr.Scroll(-1)
-		case 'q':
-			stdscr.Print("oh my god.")
-			break loop
+		switch ev := tui.PollEvent().(type) {
+		case *tcell.EventKey:
+			switch ev.Key() {
+			case tcell.KeyEscape, tcell.KeyEnter:
+				fmt.Println("Exit!")
+				break loop
+			}
 		}
 	}
+
+	tui.Fini()
 }
