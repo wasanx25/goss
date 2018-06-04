@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/gdamore/tcell"
+	runewidth "github.com/mattn/go-runewidth"
 )
 
 func main() {
@@ -20,7 +21,12 @@ func main() {
 		fmt.Fprintf(os.Stderr, "tui.Init() error: %s", err)
 	}
 
-	tui.SetStyle(tcell.StyleDefault.Foreground(tcell.ColorWhite).Background(tcell.ColorBlack))
+	tui.SetStyle(tcell.StyleDefault.Foreground(tcell.ColorBlueViolet).Background(tcell.ColorBlack))
+	x := 1
+	for _, s := range "ジャ-ジャ-麺" {
+		tui.SetContent(x, 1, s, nil, tcell.StyleDefault)
+		x += runewidth.RuneWidth(s)
+	}
 
 	tui.Show()
 
