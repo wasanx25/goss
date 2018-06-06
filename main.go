@@ -18,7 +18,9 @@ func main() {
 
 	data := `
 # 見出し1
+aa aa aa
 ## 見出し2
+bb	bb	bb
 ### 見出し3
 #### 見出し4
 
@@ -36,9 +38,15 @@ func main() {
 	y := 1
 	for _, s := range data {
 		tui.SetContent(x, y, s, nil, tcell.StyleDefault)
-		if string(s) == "\n" {
+		if s == 9 { // \t
+			x += 4
+		}
+		if s == 10 { // \n
 			x = 1
 			y++
+		}
+		if s == 32 { // space
+			x++
 		}
 		x += runewidth.RuneWidth(s)
 	}
