@@ -5,6 +5,7 @@ import (
 
 	"github.com/gdamore/tcell"
 	runewidth "github.com/mattn/go-runewidth"
+	"github.com/wasanx25/goss/window"
 )
 
 const (
@@ -26,6 +27,8 @@ func Exec(content string) (err error) {
 		return
 	}
 
+	w, err := window.New()
+
 	tui.SetStyle(tcell.StyleDefault.Foreground(tcell.ColorBlueViolet).Background(tcell.ColorBlack))
 	x := 1
 	y := 1
@@ -39,6 +42,10 @@ func Exec(content string) (err error) {
 			y++
 		case SPACE:
 			x++
+		}
+		if int(w.Row)-10 < y {
+			tui.SetContent(x, y+1, 'y', nil, tcell.StyleDefault)
+			break
 		}
 		x += runewidth.RuneWidth(s)
 	}
