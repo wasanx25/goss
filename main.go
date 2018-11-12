@@ -8,6 +8,10 @@ import (
 )
 
 func main() {
+	os.Exit(_main())
+}
+
+func _main() int {
 	data := `
 # 見出し1
 aa aa aa
@@ -22,8 +26,8 @@ bb	bb	bb
 	err := run.Exec(data)
 	if err != nil {
 		fmt.Println(err)
-		os.Exit(1)
+		return 1
 	}
 
-	os.Exit(0)
+	return 0
 }
