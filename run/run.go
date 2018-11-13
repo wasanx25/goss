@@ -13,7 +13,7 @@ const (
 )
 
 func Exec(content string) (err error) {
-	m, err := manager.NewManager()
+	m, err := manager.New()
 	if err != nil {
 		return
 	}
@@ -57,4 +57,18 @@ loop:
 	m.Tui.Fini()
 
 	return
+}
+
+func write() {
+	// r := bufio.NewReader(strings.NewReader(content))
+	// for {
+	// 	line, err := r.ReadString('\n')
+	// 	if err == io.EOF {
+	// 		break
+	// 	} else if err != nil {
+	// 		fmt.Println(err)
+	// 		break
+	// 	}
+	// 	fmt.Print(line)
+	// }
 }

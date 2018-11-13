@@ -12,7 +12,7 @@ type Manager struct {
 	Tui    tcell.Screen
 }
 
-func NewManager() (*Manager, error) {
+func New() (*Manager, error) {
 	tui, err := tcell.NewScreen()
 	if err != nil {
 		err = fmt.Errorf("tcell.NewScreen() error: %s", err)
