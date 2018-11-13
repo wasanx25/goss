@@ -29,18 +29,18 @@ func New(body string) (*Manager, error) {
 		return nil, err
 	}
 
-	window, err := window.New()
+	w, err := window.New()
 	if err != nil {
 		err = fmt.Errorf("window.New() error: %s", err)
 		return nil, err
 	}
 
-	drawer := drawer.New(body, 0)
+	d := drawer.New(body, 0)
 
 	manager := &Manager{
-		Window: window,
+		Window: w,
 		Tui:    tui,
-		Drawer: drawer,
+		Drawer: d,
 	}
 
 	return manager, nil
