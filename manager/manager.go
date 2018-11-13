@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/gdamore/tcell"
+	runewidth "github.com/mattn/go-runewidth"
 
 	"github.com/wasanx25/goss/drawer"
 	"github.com/wasanx25/goss/window"
@@ -43,4 +44,24 @@ func New(body string) (*Manager, error) {
 	}
 
 	return manager, nil
+}
+
+func (m *Manager) Write() {
+	x, y := 1, 1
+	for _, s := range m.Drawer.Body {
+		m.Tui.SetContent(x, y, s, nil, tcell.StyleDefault)
+		switch s {
+		case drawer.TAB:
+			x += 4
+		case drawer.NEW_LINE:
+			x = 1
+			y++
+		case drawer.SPACE:
+			x++
+		}
+		if int(m.Window.Row)-10 < y {
+			break
+		}
+		x += runewidth.RuneWidth(s)
+	}
 }
