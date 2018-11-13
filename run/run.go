@@ -1,11 +1,9 @@
 package run
 
 import (
-	"fmt"
-
 	"github.com/gdamore/tcell"
 	runewidth "github.com/mattn/go-runewidth"
-	"github.com/wasanx25/goss/window"
+	"github.com/wasanx25/goss/manager"
 )
 
 const (
@@ -15,25 +13,15 @@ const (
 )
 
 func Exec(content string) (err error) {
-	tui, err := tcell.NewScreen()
+	m, err := manager.NewManager()
 	if err != nil {
-		err = fmt.Errorf("tcell.NewScreen() error: %s", err)
 		return
 	}
 
-	err = tui.Init()
-	if err != nil {
-		err = fmt.Errorf("tcell.tui.Init() error: %s", err)
-		return
-	}
-
-	w, err := window.New()
-
-	tui.SetStyle(tcell.StyleDefault.Foreground(tcell.ColorBlueViolet).Background(tcell.ColorBlack))
-	x := 1
-	y := 1
+	m.Tui.SetStyle(tcell.StyleDefault.Foreground(tcell.ColorBlueViolet).Background(tcell.ColorBlack))
+	x, y := 1, 1
 	for _, s := range content {
-		tui.SetContent(x, y, s, nil, tcell.StyleDefault)
+		m.Tui.SetContent(x, y, s, nil, tcell.StyleDefault)
 		switch s {
 		case TAB:
 			x += 4
@@ -43,20 +31,22 @@ func Exec(content string) (err error) {
 		case SPACE:
 			x++
 		}
-		if int(w.Row)-10 < y {
-			tui.SetContent(x, y+1, 'y', nil, tcell.StyleDefault)
+		if int(m.Window.Row)-10 < y {
+			m.Tui.SetContent(x, y+1, 'y', nil, tcell.StyleDefault)
 			break
 		}
 		x += runewidth.RuneWidth(s)
 	}
 
-	tui.Show()
+	m.Tui.Show()
 loop:
 	for {
-		switch ev := tui.PollEvent().(type) {
+		switch ev := m.Tui.PollEvent().(type) {
 		case *tcell.EventKey:
 			switch ev.Key() {
 			case tcell.KeyEscape, tcell.KeyEnter:
+				m.Tui.Clear()
+				m.Tui.Show()
 				break loop
 			case tcell.KeyCtrlK:
 				break loop
@@ -64,7 +54,7 @@ loop:
 		}
 	}
 
-	tui.Fini()
+	m.Tui.Fini()
 
 	return
 }
