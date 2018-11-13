@@ -13,7 +13,7 @@ const (
 )
 
 func Exec(content string) (err error) {
-	m, err := manager.New()
+	m, err := manager.New(content)
 	if err != nil {
 		return
 	}
