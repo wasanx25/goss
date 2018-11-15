@@ -1,8 +1,6 @@
 package manager
 
 import (
-	"fmt"
-
 	"github.com/gdamore/tcell"
 	runewidth "github.com/mattn/go-runewidth"
 
@@ -16,34 +14,14 @@ type Manager struct {
 	Drawer *drawer.Drawer
 }
 
-func New(body string) (*Manager, error) {
-	tui, err := tcell.NewScreen()
-	if err != nil {
-		err = fmt.Errorf("tcell.NewScreen() error: %s", err)
-		return nil, err
-	}
-
-	err = tui.Init()
-	if err != nil {
-		err = fmt.Errorf("tcell.tui.Init() error: %s", err)
-		return nil, err
-	}
-
-	w, err := window.New()
-	if err != nil {
-		err = fmt.Errorf("window.New() error: %s", err)
-		return nil, err
-	}
-
-	d := drawer.New(body, 0)
-
+func New(w *window.Window, tui tcell.Screen, d *drawer.Drawer) *Manager {
 	manager := &Manager{
 		Window: w,
 		Tui:    tui,
 		Drawer: d,
 	}
 
-	return manager, nil
+	return manager
 }
 
 func (m *Manager) Write() {
