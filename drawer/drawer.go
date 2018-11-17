@@ -28,7 +28,9 @@ func (d *Drawer) Increment() {
 }
 
 func (d *Drawer) Decrement() {
-	d.Offset--
+	if d.Offset > 1 {
+		d.Offset--
+	}
 }
 
 func (d *Drawer) Get() (string, error) {

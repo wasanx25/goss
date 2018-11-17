@@ -31,7 +31,7 @@ func (m *Manager) Rewrite() {
 }
 
 func (m *Manager) Write() {
-	x, y := 1, 1
+	x, y := 1, 0
 	str, _ := m.Drawer.Get()
 	for _, s := range str {
 		m.Tui.SetContent(x, y, s, nil, tcell.StyleDefault)
