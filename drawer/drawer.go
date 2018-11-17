@@ -27,6 +27,10 @@ func (d *Drawer) Increment() {
 	d.Offset++
 }
 
+func (d *Drawer) Decrement() {
+	d.Offset--
+}
+
 func (d *Drawer) Get() (string, error) {
 	scan := bufio.NewScanner(strings.NewReader(d.Body))
 	var lines []string
