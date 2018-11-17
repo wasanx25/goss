@@ -54,15 +54,11 @@ loop:
 			}
 			switch ev.Rune() {
 			case 'j':
-				m.Tui.Clear()
 				m.Drawer.Increment()
-				m.Write()
-				m.Tui.Show()
+				m.Rewrite()
 			case 'k':
-				m.Tui.Clear()
 				m.Drawer.Decrement()
-				m.Write()
-				m.Tui.Show()
+				m.Rewrite()
 			}
 		}
 	}

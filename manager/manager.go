@@ -24,6 +24,12 @@ func New(w *window.Window, tui tcell.Screen, d *drawer.Drawer) *Manager {
 	return manager
 }
 
+func (m *Manager) Rewrite() {
+	m.Tui.Clear()
+	m.Write()
+	m.Tui.Show()
+}
+
 func (m *Manager) Write() {
 	x, y := 1, 1
 	str, _ := m.Drawer.Get()
