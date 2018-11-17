@@ -45,11 +45,7 @@ loop:
 		switch ev := m.Tui.PollEvent().(type) {
 		case *tcell.EventKey:
 			switch ev.Key() {
-			case tcell.KeyEscape, tcell.KeyEnter:
-				m.Tui.Clear()
-				m.Tui.Show()
-				break loop
-			case tcell.KeyCtrlK:
+			case tcell.KeyEscape:
 				break loop
 			}
 			switch ev.Rune() {
