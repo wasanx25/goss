@@ -26,7 +26,8 @@ func New(w *window.Window, tui tcell.Screen, d *drawer.Drawer) *Manager {
 
 func (m *Manager) Write() {
 	x, y := 1, 1
-	for _, s := range m.Drawer.Body {
+	str, _ := m.Drawer.Get()
+	for _, s := range str {
 		m.Tui.SetContent(x, y, s, nil, tcell.StyleDefault)
 		switch s {
 		case drawer.TAB:
@@ -37,7 +38,7 @@ func (m *Manager) Write() {
 		case drawer.SPACE:
 			x++
 		}
-		if int(m.Window.Row)-10 < y {
+		if int(m.Window.Row) < y {
 			break
 		}
 		x += runewidth.RuneWidth(s)
