@@ -32,7 +32,7 @@ func (m *Manager) Rewrite() {
 
 func (m *Manager) Write() {
 	x, y := 1, 0
-	str, _ := m.Drawer.Get()
+	str, _ := m.Drawer.Get(uint(m.Window.Row))
 	for _, s := range str {
 		m.Tui.SetContent(x, y, s, nil, tcell.StyleDefault)
 		switch s {
