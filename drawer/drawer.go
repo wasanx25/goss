@@ -17,3 +17,7 @@ func New(body string, offset int) *Drawer {
 		Offset: offset,
 	}
 }
+
+func (d *Drawer) Increment() {
+	d.Offset++
+}

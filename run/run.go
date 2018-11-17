@@ -52,6 +52,12 @@ loop:
 			case tcell.KeyCtrlK:
 				break loop
 			}
+			switch ev.Rune() {
+			case 'j':
+				m.Drawer.Increment()
+				m.Tui.Clear()
+				break loop
+			}
 		}
 	}
 
