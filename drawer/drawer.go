@@ -35,8 +35,10 @@ func (d *Drawer) Decrement() {
 
 func (d *Drawer) Get(end uint) (string, error) {
 	scan := bufio.NewScanner(strings.NewReader(d.Body))
-	var lines []string
-	var i uint
+	var (
+		lines []string
+		i     uint
+	)
 	for scan.Scan() {
 		i++
 		if i < d.Offset {
