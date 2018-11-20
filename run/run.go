@@ -40,13 +40,22 @@ func Exec(body string) (err error) {
 	m.Write()
 
 	m.Tui.Show()
-loop:
+
+	done := make(chan struct{}, 0)
+	go event(m, done)
+	<-done
+
+	m.Tui.Fini()
+	return
+}
+
+func event(m *manager.Manager, done chan struct{}) {
 	for {
 		switch ev := m.Tui.PollEvent().(type) {
 		case *tcell.EventKey:
 			switch ev.Key() {
 			case tcell.KeyEscape:
-				break loop
+				done <- struct{}{}
 			}
 			switch ev.Rune() {
 			case 'j':
@@ -58,8 +67,4 @@ loop:
 			}
 		}
 	}
-
-	m.Tui.Fini()
-
-	return
 }
