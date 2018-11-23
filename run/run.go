@@ -5,6 +5,7 @@ import (
 
 	"github.com/gdamore/tcell"
 	"github.com/wasanx25/goss/drawer"
+	"github.com/wasanx25/goss/event"
 	"github.com/wasanx25/goss/manager"
 	"github.com/wasanx25/goss/window"
 )
@@ -41,30 +42,32 @@ func Exec(body string) (err error) {
 
 	m.Tui.Show()
 
-	done := make(chan struct{}, 0)
-	go event(m, done)
-	<-done
+	drawCh := make(chan event.Type, 0)
+	doneCh := make(chan struct{}, 0)
+	go func() {
+		for {
+			event.Action(m.Tui.PollEvent(), drawCh, doneCh)
+		}
+	}()
+
+	go func() {
+		for {
+			select {
+			case <-doneCh:
+			case t := <-drawCh:
+				switch t {
+				case event.OneDecrement:
+					m.Drawer.Decrement()
+					m.Rewrite()
+				case event.OneIncrement:
+					m.Drawer.Increment()
+					m.Rewrite()
+				}
+			}
+		}
+	}()
+	<-doneCh
 
 	m.Tui.Fini()
 	return
-}
-
-func event(m *manager.Manager, done chan struct{}) {
-	for {
-		switch ev := m.Tui.PollEvent().(type) {
-		case *tcell.EventKey:
-			switch ev.Key() {
-			case tcell.KeyEscape:
-				done <- struct{}{}
-			}
-			switch ev.Rune() {
-			case 'j':
-				m.Drawer.Increment()
-				m.Rewrite()
-			case 'k':
-				m.Drawer.Decrement()
-				m.Rewrite()
-			}
-		}
-	}
 }
