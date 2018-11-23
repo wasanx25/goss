@@ -5,6 +5,7 @@ import (
 	runewidth "github.com/mattn/go-runewidth"
 
 	"github.com/wasanx25/goss/drawer"
+	"github.com/wasanx25/goss/event"
 	"github.com/wasanx25/goss/window"
 )
 
@@ -22,6 +23,40 @@ func New(w *window.Window, tui tcell.Screen, d *drawer.Drawer) *Manager {
 	}
 
 	return manager
+}
+
+func (m *Manager) Start() {
+	m.Tui.SetStyle(tcell.StyleDefault.Foreground(tcell.ColorBlueViolet).Background(tcell.ColorBlack))
+	m.Write()
+
+	m.Tui.Show()
+	drawCh := make(chan event.Type, 0)
+	doneCh := make(chan struct{}, 0)
+	go func() {
+		for {
+			event.Action(m.Tui.PollEvent(), drawCh, doneCh)
+		}
+	}()
+
+	go func() {
+		for {
+			select {
+			case <-doneCh:
+			case t := <-drawCh:
+				switch t {
+				case event.OneDecrement:
+					m.Drawer.Decrement()
+					m.Rewrite()
+				case event.OneIncrement:
+					m.Drawer.Increment()
+					m.Rewrite()
+				}
+			}
+		}
+	}()
+	<-doneCh
+
+	m.Tui.Fini()
 }
 
 func (m *Manager) Rewrite() {
