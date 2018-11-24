@@ -11,8 +11,8 @@ const (
 	OneDecrement
 )
 
-func Action(ev tcell.Event, drawCh chan Type, doneCh chan struct{}) {
-	switch e := ev.(type) {
+func Action(tui tcell.Screen, drawCh chan Type, doneCh chan struct{}) {
+	switch e := tui.PollEvent().(type) {
 	case *tcell.EventKey:
 		switch e.Key() {
 		case tcell.KeyEscape:

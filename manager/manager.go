@@ -34,7 +34,7 @@ func (m *Manager) Start() {
 	doneCh := make(chan struct{}, 0)
 	go func() {
 		for {
-			event.Action(m.Tui.PollEvent(), drawCh, doneCh)
+			event.Action(m.Tui, drawCh, doneCh)
 		}
 	}()
 
