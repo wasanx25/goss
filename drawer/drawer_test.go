@@ -23,3 +23,28 @@ func TestDecrement(t *testing.T) {
 		t.Errorf("expected=0, got=%d", d.Offset)
 	}
 }
+
+func TestGet(t *testing.T) {
+	tests := []struct{
+		args uint
+		body string
+		offset uint
+		expected string
+	}{
+		{1, "test1", 1, "test1"},
+		{1, "test1\ntest2\ntest3", 1, "test1"},
+		{2, "test1\ntest2\ntest3", 2, "test2\ntest3"},
+		{3, "test1\ntest2\ntest3", 1, "test1\ntest2\ntest3"},
+		{3, "test1\ntest2\ntest3", 2, "test2\ntest3"},
+	}
+
+	for _, tt := range tests {
+		d := drawer.New(tt.body, tt.offset)
+		result, _ := d.Get(tt.args)
+
+		if result != tt.expected {
+			t.Errorf("expected=%q, got=%q", tt.expected, result)
+		}
+	}
+
+}
