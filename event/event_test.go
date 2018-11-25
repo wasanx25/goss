@@ -26,13 +26,19 @@ func TestAction(t *testing.T) {
 
 	tui.InjectKey(tcell.KeyRune, 'j', tcell.ModNone)
 	tui.InjectKey(tcell.KeyRune, 'k', tcell.ModNone)
-	d := <-drawCh
-	if d != event.OneIncrement {
-		t.Errorf("expected=%v, got=%v", event.OneIncrement, d)
+	tui.InjectKey(tcell.KeyRune, 'q', tcell.ModNone)
+	draw := <-drawCh
+	if draw != event.OneIncrement {
+		t.Errorf("expected=%v, got=%v", event.OneIncrement, draw)
 	}
 
-	d = <-drawCh
-	if d != event.OneDecrement {
-		t.Errorf("expected=%v, got=%v", event.OneDecrement, d)
+	draw = <-drawCh
+	if draw != event.OneDecrement {
+		t.Errorf("expected=%v, got=%v", event.OneDecrement, draw)
+	}
+
+	done := <-doneCh
+	if done != struct{}{} {
+		t.Errorf("expected=%v, got=%v", struct{}{}, done)
 	}
 }

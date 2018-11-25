@@ -24,6 +24,8 @@ func Action(tui tcell.Screen, drawCh chan Type, doneCh chan struct{}) {
 			drawCh <- OneIncrement
 		case 'k':
 			drawCh <- OneDecrement
+		case 'q':
+			doneCh <- struct{}{}
 		}
 	}
 }
