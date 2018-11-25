@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/wasanx25/goss/run"
+	"github.com/wasanx25/goss"
 )
 
 func main() {
@@ -46,7 +46,7 @@ bb	bb	bb
 
 ##### 見出し5
 `
-	err := run.Exec(data)
+	err := goss.Run(data)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)

@@ -1,4 +1,4 @@
-package run
+package goss
 
 import (
 	"fmt"
@@ -9,7 +9,7 @@ import (
 	"github.com/wasanx25/goss/window"
 )
 
-func Exec(body string) (err error) {
+func Run(body string) (err error) {
 	w, err := window.New()
 	if err != nil {
 		err = fmt.Errorf("window.New() error: %s", err)
