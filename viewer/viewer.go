@@ -1,6 +1,7 @@
 package viewer
 
 import (
+	"fmt"
 	"github.com/gdamore/tcell"
 	runewidth "github.com/mattn/go-runewidth"
 
@@ -15,15 +16,34 @@ type Viewer struct {
 	Drawer *drawer.Drawer
 }
 
-func New(w *window.Window, tui tcell.Screen, d *drawer.Drawer) *Viewer {
-	_ = w.GetSize()
+func New(body string) *Viewer {
+	w := window.New()
+
 	manager := &Viewer{
 		Window: w,
-		Tui:    tui,
-		Drawer: d,
+		Drawer: drawer.New(body, 0),
 	}
 
 	return manager
+}
+
+func (v *Viewer) Init() error {
+	v.Window.GetSize()
+
+	tui, err := tcell.NewScreen()
+	if err != nil {
+		err = fmt.Errorf("tcell.NewScreen() error: %s", err)
+		return err
+	}
+
+	err = tui.Init()
+	if err != nil {
+		err = fmt.Errorf("tcell.tui.Init() error: %s", err)
+		return err
+	}
+
+	v.Tui = tui
+	return nil
 }
 
 func (v *Viewer) Start() {
