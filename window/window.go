@@ -12,8 +12,11 @@ type Window struct {
 	Ypixel uint16
 }
 
-func New() (*Window, error) {
-	w := &Window{}
+func New() *Window {
+	return &Window{}
+}
+
+func (w *Window) GetSize() error {
 	_, _, err := syscall.Syscall(
 		syscall.SYS_IOCTL,
 		uintptr(syscall.Stdin),
@@ -22,7 +25,8 @@ func New() (*Window, error) {
 	)
 
 	if err != 0 {
-		return nil, err
+		return err
 	}
-	return w, nil
+
+	return nil
 }

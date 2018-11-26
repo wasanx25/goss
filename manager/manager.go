@@ -16,6 +16,7 @@ type Manager struct {
 }
 
 func New(w *window.Window, tui tcell.Screen, d *drawer.Drawer) *Manager {
+	_ = w.GetSize()
 	manager := &Manager{
 		Window: w,
 		Tui:    tui,

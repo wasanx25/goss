@@ -10,11 +10,7 @@ import (
 )
 
 func Run(body string) (err error) {
-	w, err := window.New()
-	if err != nil {
-		err = fmt.Errorf("window.New() error: %s", err)
-		return
-	}
+	w := window.New()
 
 	tui, err := tcell.NewScreen()
 	if err != nil {
