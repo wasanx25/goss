@@ -14,6 +14,7 @@ type Viewer struct {
 	Window *window.Window
 	Tui    tcell.Screen
 	Drawer *drawer.Drawer
+	Color  tcell.Style
 }
 
 func New(body string) *Viewer {
@@ -43,11 +44,14 @@ func (v *Viewer) Init() error {
 	}
 
 	v.Tui = tui
+	v.Color = tcell.StyleDefault.
+					Foreground(tcell.ColorBlueViolet).
+					Background(tcell.ColorBlack)
+	v.Tui.SetStyle(v.Color)
 	return nil
 }
 
 func (v *Viewer) Start() {
-	v.Tui.SetStyle(tcell.StyleDefault.Foreground(tcell.ColorBlueViolet).Background(tcell.ColorBlack))
 	v.Write()
 
 	v.Tui.Show()
