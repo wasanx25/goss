@@ -1,4 +1,4 @@
-package manager
+package viewer
 
 import (
 	"github.com/gdamore/tcell"
@@ -9,15 +9,15 @@ import (
 	"github.com/wasanx25/goss/window"
 )
 
-type Manager struct {
+type Viewer struct {
 	Window *window.Window
 	Tui    tcell.Screen
 	Drawer *drawer.Drawer
 }
 
-func New(w *window.Window, tui tcell.Screen, d *drawer.Drawer) *Manager {
+func New(w *window.Window, tui tcell.Screen, d *drawer.Drawer) *Viewer {
 	_ = w.GetSize()
-	manager := &Manager{
+	manager := &Viewer{
 		Window: w,
 		Tui:    tui,
 		Drawer: d,
@@ -26,16 +26,16 @@ func New(w *window.Window, tui tcell.Screen, d *drawer.Drawer) *Manager {
 	return manager
 }
 
-func (m *Manager) Start() {
-	m.Tui.SetStyle(tcell.StyleDefault.Foreground(tcell.ColorBlueViolet).Background(tcell.ColorBlack))
-	m.Write()
+func (v *Viewer) Start() {
+	v.Tui.SetStyle(tcell.StyleDefault.Foreground(tcell.ColorBlueViolet).Background(tcell.ColorBlack))
+	v.Write()
 
-	m.Tui.Show()
+	v.Tui.Show()
 	drawCh := make(chan event.Type, 0)
 	doneCh := make(chan struct{}, 0)
 	go func() {
 		for {
-			event.Action(m.Tui, drawCh, doneCh)
+			event.Action(v.Tui, drawCh, doneCh)
 		}
 	}()
 
@@ -46,31 +46,31 @@ func (m *Manager) Start() {
 			case t := <-drawCh:
 				switch t {
 				case event.OneDecrement:
-					m.Drawer.Decrement()
-					m.Rewrite()
+					v.Drawer.Decrement()
+					v.Rewrite()
 				case event.OneIncrement:
-					m.Drawer.Increment()
-					m.Rewrite()
+					v.Drawer.Increment()
+					v.Rewrite()
 				}
 			}
 		}
 	}()
 	<-doneCh
 
-	m.Tui.Fini()
+	v.Tui.Fini()
 }
 
-func (m *Manager) Rewrite() {
-	m.Tui.Clear()
-	m.Write()
-	m.Tui.Show()
+func (v *Viewer) Rewrite() {
+	v.Tui.Clear()
+	v.Write()
+	v.Tui.Show()
 }
 
-func (m *Manager) Write() {
+func (v *Viewer) Write() {
 	x, y := 1, 0
-	str, _ := m.Drawer.Get(uint(m.Window.Row))
+	str, _ := v.Drawer.Get(uint(v.Window.Row))
 	for _, s := range str {
-		m.Tui.SetContent(x, y, s, nil, tcell.StyleDefault)
+		v.Tui.SetContent(x, y, s, nil, tcell.StyleDefault)
 		switch s {
 		case drawer.TAB:
 			x += 4
@@ -80,7 +80,7 @@ func (m *Manager) Write() {
 		case drawer.SPACE:
 			x++
 		}
-		if int(m.Window.Row) < y {
+		if int(v.Window.Row) < y {
 			break
 		}
 		x += runewidth.RuneWidth(s)
