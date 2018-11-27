@@ -46,8 +46,8 @@ func (v *Viewer) Init() error {
 
 	v.Tui = tui
 	v.Color = tcell.StyleDefault.
-					Foreground(tcell.ColorBlueViolet).
-					Background(tcell.ColorBlack)
+		Foreground(tcell.ColorBlueViolet).
+		Background(tcell.ColorBlack)
 	v.Tui.SetStyle(v.Color)
 	return nil
 }
