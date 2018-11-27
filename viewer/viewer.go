@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/gdamore/tcell"
-	runewidth "github.com/mattn/go-runewidth"
 
 	"github.com/wasanx25/goss/drawer"
 	"github.com/wasanx25/goss/event"
@@ -93,22 +92,13 @@ func (v *Viewer) Rewrite() {
 }
 
 func (v *Viewer) Write() {
-	x, y := 1, 0
+	v.Drawer.PositionInit()
 	str, _ := v.Drawer.Get()
 	for _, s := range str {
-		v.Tui.SetContent(x, y, s, nil, tcell.StyleDefault)
-		switch s {
-		case drawer.TAB:
-			x += 4
-		case drawer.NEW_LINE:
-			x = 1
-			y++
-		case drawer.SPACE:
-			x++
-		}
-		if int(v.Window.Row) < y {
+		v.Tui.SetContent(v.Drawer.Position.Col, v.Drawer.Position.Row, s, nil, tcell.StyleDefault)
+		v.Drawer.AddPosition(s)
+		if int(v.Window.Row) < v.Drawer.Position.Row {
 			break
 		}
-		x += runewidth.RuneWidth(s)
 	}
 }
