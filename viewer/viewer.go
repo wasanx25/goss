@@ -53,7 +53,7 @@ func (v *Viewer) Init() error {
 }
 
 func (v *Viewer) Start() {
-	v.Write()
+	v.write()
 
 	v.Tui.Show()
 	drawCh := make(chan event.Type, 0)
@@ -72,10 +72,10 @@ func (v *Viewer) Start() {
 				switch t {
 				case event.OneDecrement:
 					v.Drawer.Decrement()
-					v.Rewrite()
+					v.rewrite()
 				case event.OneIncrement:
 					v.Drawer.Increment()
-					v.Rewrite()
+					v.rewrite()
 				}
 			}
 		}
@@ -85,13 +85,13 @@ func (v *Viewer) Start() {
 	v.Tui.Fini()
 }
 
-func (v *Viewer) Rewrite() {
+func (v *Viewer) rewrite() {
 	v.Tui.Clear()
-	v.Write()
+	v.write()
 	v.Tui.Show()
 }
 
-func (v *Viewer) Write() {
+func (v *Viewer) write() {
 	v.Drawer.PositionInit()
 	str, _ := v.Drawer.Get()
 	for _, s := range str {
