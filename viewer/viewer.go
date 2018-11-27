@@ -31,6 +31,7 @@ func New(body string) *Viewer {
 
 func (v *Viewer) Init() error {
 	v.Window.SetSize()
+	v.Drawer.Limit = uint(v.Window.Row)
 
 	tui, err := tcell.NewScreen()
 	if err != nil {
@@ -93,7 +94,7 @@ func (v *Viewer) Rewrite() {
 
 func (v *Viewer) Write() {
 	x, y := 1, 0
-	str, _ := v.Drawer.Get(uint(v.Window.Row))
+	str, _ := v.Drawer.Get()
 	for _, s := range str {
 		v.Tui.SetContent(x, y, s, nil, tcell.StyleDefault)
 		switch s {

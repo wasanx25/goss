@@ -25,26 +25,26 @@ func TestDecrement(t *testing.T) {
 }
 
 func TestGet(t *testing.T) {
-	tests := []struct{
-		args uint
-		body string
-		offset uint
+	tests := []struct {
+		body     string
+		offset   uint
+		limit    uint
 		expected string
 	}{
-		{1, "test1", 1, "test1"},
-		{1, "test1\ntest2\ntest3", 1, "test1"},
-		{2, "test1\ntest2\ntest3", 2, "test2\ntest3"},
-		{3, "test1\ntest2\ntest3", 1, "test1\ntest2\ntest3"},
-		{3, "test1\ntest2\ntest3", 2, "test2\ntest3"},
+		{"test1", 1, 1, "test1"},
+		{"test1\ntest2\ntest3", 1, 1, "test1"},
+		{"test1\ntest2\ntest3", 2, 2, "test2\ntest3"},
+		{"test1\ntest2\ntest3", 1, 3, "test1\ntest2\ntest3"},
+		{"test1\ntest2\ntest3", 2, 3, "test2\ntest3"},
 	}
 
 	for _, tt := range tests {
 		d := drawer.New(tt.body, tt.offset)
-		result, _ := d.Get(tt.args)
+		d.Limit = tt.limit
+		result, _ := d.Get()
 
 		if result != tt.expected {
 			t.Errorf("expected=%q, got=%q", tt.expected, result)
 		}
 	}
-
 }

@@ -8,6 +8,7 @@ import (
 type Drawer struct {
 	Body   string
 	Offset uint
+	Limit  uint
 }
 
 const (
@@ -33,7 +34,7 @@ func (d *Drawer) Decrement() {
 	}
 }
 
-func (d *Drawer) Get(end uint) (string, error) {
+func (d *Drawer) Get() (string, error) {
 	scan := bufio.NewScanner(strings.NewReader(d.Body))
 	var (
 		lines []string
@@ -43,7 +44,7 @@ func (d *Drawer) Get(end uint) (string, error) {
 		i++
 		if i < d.Offset {
 			continue
-		} else if i >= end+d.Offset {
+		} else if i >= d.Limit+d.Offset {
 			break
 		}
 		lines = append(lines, scan.Text())
