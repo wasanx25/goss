@@ -16,7 +16,7 @@ func New() *Window {
 	return &Window{}
 }
 
-func (w *Window) GetSize() error {
+func (w *Window) SetSize() error {
 	_, _, err := syscall.Syscall(
 		syscall.SYS_IOCTL,
 		uintptr(syscall.Stdin),

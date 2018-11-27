@@ -2,6 +2,7 @@ package viewer
 
 import (
 	"fmt"
+
 	"github.com/gdamore/tcell"
 	runewidth "github.com/mattn/go-runewidth"
 
@@ -29,7 +30,7 @@ func New(body string) *Viewer {
 }
 
 func (v *Viewer) Init() error {
-	v.Window.GetSize()
+	v.Window.SetSize()
 
 	tui, err := tcell.NewScreen()
 	if err != nil {
