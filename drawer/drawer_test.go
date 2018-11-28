@@ -52,3 +52,44 @@ func TestGet(t *testing.T) {
 		}
 	}
 }
+
+func TestAddPosition(t *testing.T) {
+	tests := []struct {
+		args      rune
+		expectCol int
+		expectRow int
+	}{
+		{'\n', 1, 1},
+		{'\t', 4, 0},
+		{'a', 1, 0},
+		{'か', 2, 0},
+	}
+
+	d := drawer.New("", 0) // dummy args
+	for _, tt := range tests {
+		d.AddPosition(tt.args)
+
+		if d.Position.Col != tt.expectCol {
+			t.Errorf(string(tt.args)+" is expected=%d, got=%d", tt.expectCol, d.Position.Col)
+		}
+
+		if d.Position.Row != tt.expectRow {
+			t.Errorf(string(tt.args)+" is expected=%d, got=%d", tt.expectRow, d.Position.Row)
+		}
+
+		d.Position.Row, d.Position.Col = 0, 0 // reset
+	}
+}
+
+func TestPositionInit(t *testing.T) {
+	d := drawer.New("", 0) // dummy args
+	d.PositionInit()
+
+	if d.Position.Col != 1 {
+		t.Errorf("expected=%d, got=%d", 1, d.Position.Col)
+	}
+
+	if d.Position.Row != 1 {
+		t.Errorf("expected=%d, got=%d", 1, d.Position.Row)
+	}
+}
