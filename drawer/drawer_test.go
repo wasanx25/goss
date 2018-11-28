@@ -41,7 +41,11 @@ func TestGet(t *testing.T) {
 	for _, tt := range tests {
 		d := drawer.New(tt.body, tt.offset)
 		d.Limit = tt.limit
-		result, _ := d.Get()
+		result, err := d.Get()
+
+		if err != nil {
+			t.Fatal(err)
+		}
 
 		if result != tt.expected {
 			t.Errorf("expected=%q, got=%q", tt.expected, result)
