@@ -70,10 +70,10 @@ func (v *Viewer) Start() {
 			case <-doneCh:
 			case t := <-drawCh:
 				switch t {
-				case event.OneDecrement:
+				case event.PageDown:
 					v.Drawer.Decrement()
 					v.rewrite()
-				case event.OneIncrement:
+				case event.PageUp:
 					v.Drawer.Increment()
 					v.rewrite()
 				}

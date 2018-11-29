@@ -7,8 +7,8 @@ import (
 type Type int
 
 const (
-	OneIncrement Type = iota
-	OneDecrement
+	PageUp Type = iota
+	PageDown
 )
 
 func Action(tui tcell.Screen, drawCh chan Type, doneCh chan struct{}) {
@@ -21,9 +21,9 @@ func Action(tui tcell.Screen, drawCh chan Type, doneCh chan struct{}) {
 
 		switch e.Rune() {
 		case 'j':
-			drawCh <- OneIncrement
+			drawCh <- PageUp
 		case 'k':
-			drawCh <- OneDecrement
+			drawCh <- PageDown
 		case 'q':
 			doneCh <- struct{}{}
 		}
