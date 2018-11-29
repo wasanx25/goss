@@ -14,6 +14,12 @@ type Event struct {
 const (
 	PageUp Type = iota
 	PageDown
+	PageUpScreen
+	PageDownScreen
+	PageUpHalf
+	PageDownHalf
+	PageTop
+	PageEnd
 )
 
 func New(drawCh chan Type, doneCh chan struct{}) *Event {
@@ -29,6 +35,14 @@ func (e *Event) Action(tui tcell.Screen) {
 		switch ev.Key() {
 		case tcell.KeyEscape:
 			e.DoneCh <- struct{}{}
+		case tcell.KeyCtrlB:
+			e.DrawCh <- PageUpScreen
+		case tcell.KeyCtrlF:
+			e.DrawCh <- PageDownScreen
+		case tcell.KeyCtrlU:
+			e.DrawCh <- PageUpHalf
+		case tcell.KeyCtrlD:
+			e.DrawCh <- PageDownHalf
 		}
 
 		switch ev.Rune() {
@@ -38,6 +52,8 @@ func (e *Event) Action(tui tcell.Screen) {
 			e.DrawCh <- PageDown
 		case 'q':
 			e.DoneCh <- struct{}{}
+		case 'G':
+			e.DrawCh <- PageEnd
 		}
 	}
 }
