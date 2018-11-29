@@ -18,7 +18,7 @@ type Viewer struct {
 	Event  *event.Event
 }
 
-func New(body string) *Viewer {
+func New(text string) *Viewer {
 	w := window.New()
 
 	drawCh := make(chan event.Type, 0)
@@ -27,7 +27,7 @@ func New(body string) *Viewer {
 
 	manager := &Viewer{
 		Window: w,
-		Drawer: drawer.New(body, 0),
+		Drawer: drawer.New(text, 0),
 		Event:  e,
 	}
 

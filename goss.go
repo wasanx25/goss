@@ -4,9 +4,9 @@ import (
 	"github.com/wasanx25/goss/viewer"
 )
 
-func Run(body string) error {
+func Run(text string) error {
 
-	v := viewer.New(body)
+	v := viewer.New(text)
 	if err := v.Init(); err != nil {
 		return err
 	}

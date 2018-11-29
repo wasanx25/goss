@@ -8,7 +8,7 @@ import (
 )
 
 type Drawer struct {
-	Body     string
+	Text     string
 	Offset   uint
 	Limit    uint
 	Position DrawPosition
@@ -25,9 +25,9 @@ const (
 	SPACE    = ' '
 )
 
-func New(body string, offset uint) *Drawer {
+func New(text string, offset uint) *Drawer {
 	return &Drawer{
-		Body:   body,
+		Text:   text,
 		Offset: offset,
 	}
 }
@@ -43,7 +43,7 @@ func (d *Drawer) Decrement() {
 }
 
 func (d *Drawer) Get() (string, error) {
-	scan := bufio.NewScanner(strings.NewReader(d.Body))
+	scan := bufio.NewScanner(strings.NewReader(d.Text))
 	var (
 		lines []string
 		i     uint

@@ -26,7 +26,7 @@ func TestDecrement(t *testing.T) {
 
 func TestGet(t *testing.T) {
 	tests := []struct {
-		body     string
+		text     string
 		offset   uint
 		limit    uint
 		expected string
@@ -39,7 +39,7 @@ func TestGet(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		d := drawer.New(tt.body, tt.offset)
+		d := drawer.New(tt.text, tt.offset)
 		d.Limit = tt.limit
 		result, err := d.Get()
 
