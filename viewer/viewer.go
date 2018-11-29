@@ -15,14 +15,20 @@ type Viewer struct {
 	Tui    tcell.Screen
 	Drawer *drawer.Drawer
 	Color  tcell.Style
+	Event  *event.Event
 }
 
 func New(body string) *Viewer {
 	w := window.New()
 
+	drawCh := make(chan event.Type, 0)
+	doneCh := make(chan struct{}, 0)
+	e := event.New(drawCh, doneCh)
+
 	manager := &Viewer{
 		Window: w,
 		Drawer: drawer.New(body, 0),
+		Event:  e,
 	}
 
 	return manager
@@ -56,19 +62,16 @@ func (v *Viewer) Start() {
 	v.write()
 
 	v.Tui.Show()
-	drawCh := make(chan event.Type, 0)
-	doneCh := make(chan struct{}, 0)
 	go func() {
 		for {
-			event.Action(v.Tui, drawCh, doneCh)
+			v.Event.Action(v.Tui)
 		}
 	}()
 
 	go func() {
 		for {
 			select {
-			case <-doneCh:
-			case t := <-drawCh:
+			case t := <-v.Event.DrawCh:
 				switch t {
 				case event.PageDown:
 					v.Drawer.Decrement()
@@ -80,7 +83,7 @@ func (v *Viewer) Start() {
 			}
 		}
 	}()
-	<-doneCh
+	<-v.Event.DoneCh
 
 	v.Tui.Fini()
 }

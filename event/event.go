@@ -6,26 +6,38 @@ import (
 
 type Type int
 
+type Event struct {
+	DrawCh chan Type
+	DoneCh chan struct{}
+}
+
 const (
 	PageUp Type = iota
 	PageDown
 )
 
-func Action(tui tcell.Screen, drawCh chan Type, doneCh chan struct{}) {
-	switch e := tui.PollEvent().(type) {
+func New(drawCh chan Type, doneCh chan struct{}) *Event {
+	return &Event{
+		DrawCh: drawCh,
+		DoneCh: doneCh,
+	}
+}
+
+func (e *Event) Action(tui tcell.Screen) {
+	switch ev := tui.PollEvent().(type) {
 	case *tcell.EventKey:
-		switch e.Key() {
+		switch ev.Key() {
 		case tcell.KeyEscape:
-			doneCh <- struct{}{}
+			e.DoneCh <- struct{}{}
 		}
 
-		switch e.Rune() {
+		switch ev.Rune() {
 		case 'j':
-			drawCh <- PageUp
+			e.DrawCh <- PageUp
 		case 'k':
-			drawCh <- PageDown
+			e.DrawCh <- PageDown
 		case 'q':
-			doneCh <- struct{}{}
+			e.DoneCh <- struct{}{}
 		}
 	}
 }
