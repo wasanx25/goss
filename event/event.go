@@ -7,8 +7,9 @@ import (
 type Type int
 
 type Event struct {
-	DrawCh chan Type
-	DoneCh chan struct{}
+	DrawCh   chan Type
+	DoneCh   chan struct{}
+	ResizeCh chan struct{}
 }
 
 const (
@@ -22,10 +23,11 @@ const (
 	PageEnd
 )
 
-func New(drawCh chan Type, doneCh chan struct{}) *Event {
+func New(drawCh chan Type, doneCh chan struct{}, resizeCh chan struct{}) *Event {
 	return &Event{
-		DrawCh: drawCh,
-		DoneCh: doneCh,
+		DrawCh:   drawCh,
+		DoneCh:   doneCh,
+		ResizeCh: resizeCh,
 	}
 }
 
@@ -55,5 +57,7 @@ func (e *Event) Action(tui tcell.Screen) {
 		case 'G':
 			e.DrawCh <- PageEnd
 		}
+	case *tcell.EventResize:
+		e.ResizeCh <- struct{}{}
 	}
 }

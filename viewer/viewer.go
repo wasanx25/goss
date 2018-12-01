@@ -23,7 +23,8 @@ func New(text string) *Viewer {
 
 	drawCh := make(chan event.Type, 0)
 	doneCh := make(chan struct{}, 0)
-	e := event.New(drawCh, doneCh)
+	resizeCh := make(chan struct{}, 0)
+	e := event.New(drawCh, doneCh, resizeCh)
 
 	manager := &Viewer{
 		Window: w,
@@ -92,6 +93,10 @@ func (v *Viewer) Start() {
 					v.Drawer.DecrementWindow()
 					v.rewrite()
 				}
+			case <-v.Event.ResizeCh:
+				v.Window.SetSize()
+				v.Drawer.Limit = int(v.Window.Row)
+				v.rewrite()
 			}
 		}
 	}()
