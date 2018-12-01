@@ -79,6 +79,9 @@ func (v *Viewer) Start() {
 				case event.PageUp:
 					v.Drawer.Increment()
 					v.rewrite()
+				case event.PageDownHalf:
+					v.Drawer.IncrementHalf()
+					v.rewrite()
 				}
 			}
 		}

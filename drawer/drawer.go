@@ -51,6 +51,14 @@ func (d *Drawer) Decrement() {
 	}
 }
 
+func (d *Drawer) IncrementHalf() {
+	if d.Max > d.Offset+d.Limit/2*3 {
+		d.Offset = d.Offset + d.Limit/2
+	} else if d.Offset+d.Limit < d.Max {
+		d.Offset = d.Max - d.Limit
+	}
+}
+
 func (d *Drawer) Get() (string, error) {
 	scan := bufio.NewScanner(strings.NewReader(d.Text))
 	var (

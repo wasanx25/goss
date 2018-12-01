@@ -31,6 +31,31 @@ func TestIncrement(t *testing.T) {
 	}
 }
 
+func TestIncrementHalf(t *testing.T) {
+	tests := []struct {
+		max      int
+		offset   int
+		limit    int
+		expected int
+	}{
+		{10, 1, 6, 1 + 3},
+		{10, 7, 2, 7 + 1},
+		{10, 12, 1, 12},
+		{10, 1, 11, 1},
+	}
+
+	for _, tt := range tests {
+		d := drawer.New("test", tt.offset)
+		d.Limit = tt.limit
+		d.Max = tt.max
+
+		d.IncrementHalf()
+		if d.Offset != tt.expected {
+			t.Errorf("expected=%d, got=%d", tt.expected, d.Offset)
+		}
+	}
+}
+
 func TestDecrement(t *testing.T) {
 	d := drawer.New("test", 10)
 	d.Decrement()
