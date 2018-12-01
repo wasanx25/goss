@@ -85,6 +85,9 @@ func (v *Viewer) Start() {
 				case event.PageUpHalf:
 					v.Drawer.DecrementHalf()
 					v.rewrite()
+				case event.PageDownScreen:
+					v.Drawer.IncrementWindow()
+					v.rewrite()
 				}
 			}
 		}

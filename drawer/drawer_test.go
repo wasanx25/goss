@@ -80,6 +80,30 @@ func TestDecrementHalf(t *testing.T) {
 	}
 }
 
+func TestIncrementWindow(t *testing.T) {
+	tests := []struct {
+		max      int
+		offset   int
+		limit    int
+		expected int
+	}{
+		{10, 1, 3, 4},
+		{10, 3, 6, 4},
+		{10, 5, 5, 5},
+	}
+
+	for _, tt := range tests {
+		d := drawer.New("test", tt.offset)
+		d.Limit = tt.limit
+		d.Max = tt.max
+
+		d.IncrementWindow()
+		if d.Offset != tt.expected {
+			t.Errorf("expected=%d, got=%d", tt.expected, d.Offset)
+		}
+	}
+}
+
 func TestDecrement(t *testing.T) {
 	d := drawer.New("test", 10)
 	d.Decrement()
