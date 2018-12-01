@@ -36,7 +36,7 @@ func New(text string) *Viewer {
 
 func (v *Viewer) Init() error {
 	v.Window.SetSize()
-	v.Drawer.Limit = uint(v.Window.Row)
+	v.Drawer.Limit = int(v.Window.Row)
 
 	tui, err := tcell.NewScreen()
 	if err != nil {

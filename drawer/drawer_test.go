@@ -27,8 +27,8 @@ func TestDecrement(t *testing.T) {
 func TestGet(t *testing.T) {
 	tests := []struct {
 		text     string
-		offset   uint
-		limit    uint
+		offset   int
+		limit    int
 		expected string
 	}{
 		{"test1", 1, 1, "test1"},
