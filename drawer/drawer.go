@@ -11,6 +11,7 @@ type Drawer struct {
 	Text     string
 	Offset   int
 	Limit    int
+	Max      int
 	Position DrawPosition
 }
 
@@ -26,14 +27,22 @@ const (
 )
 
 func New(text string, offset int) *Drawer {
+	max := strings.Count(text, "\n")
 	return &Drawer{
 		Text:   text,
 		Offset: offset,
+		Max:    max,
 	}
 }
 
 func (d *Drawer) Increment() {
-	d.Offset++
+	if d.Max < d.Limit {
+		return
+	}
+
+	if d.Limit+d.Offset < d.Max {
+		d.Offset++
+	}
 }
 
 func (d *Drawer) Decrement() {
@@ -78,5 +87,5 @@ func (d *Drawer) AddPosition(r rune) {
 }
 
 func (d *Drawer) PositionInit() {
-	d.Position.Row, d.Position.Col = 1, 1
+	d.Position.Row, d.Position.Col = 0, 1
 }

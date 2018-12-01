@@ -7,11 +7,27 @@ import (
 )
 
 func TestIncrement(t *testing.T) {
-	d := drawer.New("test", 0)
-	d.Increment()
+	tests := []struct {
+		max      int
+		offset   int
+		limit    int
+		expected int
+	}{
+		{10, 1, 1, 1 + 1},
+		{10, 8, 1, 8 + 1},
+		{10, 12, 1, 12},
+		{10, 1, 11, 1},
+	}
 
-	if d.Offset != 1 {
-		t.Errorf("expected=1, got=%d", d.Offset)
+	for _, tt := range tests {
+		d := drawer.New("test", tt.offset)
+		d.Limit = tt.limit
+		d.Max = tt.max
+
+		d.Increment()
+		if d.Offset != tt.expected {
+			t.Errorf("expected=%d, got=%d", tt.expected, d.Offset)
+		}
 	}
 }
 
