@@ -46,9 +46,9 @@ func (e *Event) Action(tui tcell.Screen) {
 		}
 
 		switch ev.Rune() {
-		case 'j':
-			e.DrawCh <- PageUp
 		case 'k':
+			e.DrawCh <- PageUp
+		case 'j':
 			e.DrawCh <- PageDown
 		case 'q':
 			e.DoneCh <- struct{}{}
