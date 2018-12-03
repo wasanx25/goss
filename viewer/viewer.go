@@ -19,13 +19,10 @@ type Viewer struct {
 }
 
 func New(text string) *Viewer {
-	w := window.New()
-	e := event.New()
-
 	manager := &Viewer{
-		Window: w,
+		Window: window.New(),
 		Drawer: drawer.New(text, 0),
-		Event:  e,
+		Event:  event.New(),
 	}
 
 	return manager
