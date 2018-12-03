@@ -10,10 +10,7 @@ import (
 func TestAction(t *testing.T) {
 	tui := tcell.NewSimulationScreen("")
 
-	drawCh := make(chan event.Type)
-	doneCh := make(chan struct{})
-
-	e := event.New(drawCh, doneCh)
+	e := event.New()
 
 	if err := tui.Init(); err != nil {
 		t.Fatal(err)

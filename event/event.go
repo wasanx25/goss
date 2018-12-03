@@ -23,11 +23,11 @@ const (
 	PageEnd
 )
 
-func New(drawCh chan Type, doneCh chan struct{}, resizeCh chan struct{}) *Event {
+func New() *Event {
 	return &Event{
-		DrawCh:   drawCh,
-		DoneCh:   doneCh,
-		ResizeCh: resizeCh,
+		DrawCh:   make(chan Type, 0),
+		DoneCh:   make(chan struct{}, 0),
+		ResizeCh: make(chan struct{}, 0),
 	}
 }
 

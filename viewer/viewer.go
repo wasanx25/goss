@@ -20,11 +20,7 @@ type Viewer struct {
 
 func New(text string) *Viewer {
 	w := window.New()
-
-	drawCh := make(chan event.Type, 0)
-	doneCh := make(chan struct{}, 0)
-	resizeCh := make(chan struct{}, 0)
-	e := event.New(drawCh, doneCh, resizeCh)
+	e := event.New()
 
 	manager := &Viewer{
 		Window: w,
