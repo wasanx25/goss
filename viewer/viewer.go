@@ -108,6 +108,9 @@ func (v *Viewer) write() {
 	v.Drawer.InitPosition()
 	str, _ := v.Drawer.Get()
 	for _, s := range str {
+		if v.Drawer.Position.Col >= int(v.Window.Col) {
+			v.Drawer.Break()
+		}
 		v.Tui.SetContent(v.Drawer.Position.Col, v.Drawer.Position.Row, s, nil, tcell.StyleDefault)
 		v.Drawer.AddPosition(s)
 		if int(v.Window.Row) < v.Drawer.Position.Row {

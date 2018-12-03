@@ -206,3 +206,16 @@ func TestInitPosition(t *testing.T) {
 		t.Errorf("expected=%d, got=%d", 0, d.Position.Row)
 	}
 }
+
+func TestBreak(t *testing.T) {
+	d := drawer.New("", 0) // dummy args
+	d.Break()
+
+	if d.Position.Col != 1 {
+		t.Errorf("expected=%d, got=%d", 1, d.Position.Col)
+	}
+
+	if d.Position.Row != 1 {
+		t.Errorf("expected=%d, got=%d", 1, d.Position.Row)
+	}
+}

@@ -121,3 +121,8 @@ func (d *Drawer) AddPosition(r rune) {
 func (d *Drawer) InitPosition() {
 	d.Position.Row, d.Position.Col = 0, 1
 }
+
+func (d *Drawer) Break() {
+	d.Position.Row++
+	d.Position.Col = 1
+}
