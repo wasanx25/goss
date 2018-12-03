@@ -118,6 +118,6 @@ func (d *Drawer) AddPosition(r rune) {
 	d.Position.Col += runewidth.RuneWidth(r)
 }
 
-func (d *Drawer) PositionInit() {
+func (d *Drawer) InitPosition() {
 	d.Position.Row, d.Position.Col = 0, 1
 }

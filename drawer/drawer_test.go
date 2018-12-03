@@ -194,15 +194,15 @@ func TestAddPosition(t *testing.T) {
 	}
 }
 
-func TestPositionInit(t *testing.T) {
+func TestInitPosition(t *testing.T) {
 	d := drawer.New("", 0) // dummy args
-	d.PositionInit()
+	d.InitPosition()
 
 	if d.Position.Col != 1 {
 		t.Errorf("expected=%d, got=%d", 1, d.Position.Col)
 	}
 
-	if d.Position.Row != 1 {
-		t.Errorf("expected=%d, got=%d", 1, d.Position.Row)
+	if d.Position.Row != 0 {
+		t.Errorf("expected=%d, got=%d", 0, d.Position.Row)
 	}
 }

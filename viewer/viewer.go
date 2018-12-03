@@ -105,7 +105,7 @@ func (v *Viewer) rewrite() {
 }
 
 func (v *Viewer) write() {
-	v.Drawer.PositionInit()
+	v.Drawer.InitPosition()
 	str, _ := v.Drawer.Get()
 	for _, s := range str {
 		v.Tui.SetContent(v.Drawer.Position.Col, v.Drawer.Position.Row, s, nil, tcell.StyleDefault)
