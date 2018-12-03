@@ -30,13 +30,13 @@ func TestAction(t *testing.T) {
 	tui.InjectKey(tcell.KeyRune, 'k', tcell.ModNone)
 	tui.InjectKey(tcell.KeyRune, 'q', tcell.ModNone)
 	draw := <-e.DrawCh
-	if draw != event.PageUp {
-		t.Errorf("expected=%v, got=%v", event.PageUp, draw)
+	if draw != event.PageDown {
+		t.Errorf("expected=%v, got=%v", event.PageDown, draw)
 	}
 
 	draw = <-e.DrawCh
-	if draw != event.PageDown {
-		t.Errorf("expected=%v, got=%v", event.PageDown, draw)
+	if draw != event.PageUp {
+		t.Errorf("expected=%v, got=%v", event.PageUp, draw)
 	}
 
 	done := <-e.DoneCh
