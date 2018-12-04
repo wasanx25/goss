@@ -8,8 +8,8 @@ import (
 )
 
 type Drawer struct {
-	Text     string
-	Offset   int
+	text     string
+	offset   int
 	Limit    int
 	Max      int
 	Position DrawPosition
@@ -29,10 +29,14 @@ const (
 func New(text string, offset int) *Drawer {
 	max := strings.Count(text, "\n")
 	return &Drawer{
-		Text:   text,
-		Offset: offset,
+		text:   text,
+		offset: offset,
 		Max:    max,
 	}
+}
+
+func (d *Drawer) GetOffset() int {
+	return d.offset
 }
 
 func (d *Drawer) Increment() {
@@ -40,60 +44,60 @@ func (d *Drawer) Increment() {
 		return
 	}
 
-	if d.Limit+d.Offset < d.Max {
-		d.Offset++
+	if d.Limit+d.offset < d.Max {
+		d.offset++
 	}
 }
 
 func (d *Drawer) Decrement() {
-	if d.Offset > 1 {
-		d.Offset--
+	if d.offset > 1 {
+		d.offset--
 	}
 }
 
 func (d *Drawer) IncrementHalf() {
-	if d.Max > d.Offset+d.Limit/2*3 {
-		d.Offset = d.Offset + d.Limit/2
-	} else if d.Offset+d.Limit < d.Max {
-		d.Offset = d.Max - d.Limit
+	if d.Max > d.offset+d.Limit/2*3 {
+		d.offset = d.offset + d.Limit/2
+	} else if d.offset+d.Limit < d.Max {
+		d.offset = d.Max - d.Limit
 	}
 }
 
 func (d *Drawer) DecrementHalf() {
-	if d.Offset > d.Limit/2 {
-		d.Offset = d.Offset - d.Limit/2
-	} else if d.Offset > 1 && d.Offset < d.Limit/2 {
-		d.Offset = 1
+	if d.offset > d.Limit/2 {
+		d.offset = d.offset - d.Limit/2
+	} else if d.offset > 1 && d.offset < d.Limit/2 {
+		d.offset = 1
 	}
 }
 
 func (d *Drawer) IncrementWindow() {
-	if d.Max > d.Offset+d.Limit*2 {
-		d.Offset = d.Offset + d.Limit
-	} else if d.Offset+d.Limit < d.Max {
-		d.Offset = d.Max - d.Limit
+	if d.Max > d.offset+d.Limit*2 {
+		d.offset = d.offset + d.Limit
+	} else if d.offset+d.Limit < d.Max {
+		d.offset = d.Max - d.Limit
 	}
 }
 
 func (d *Drawer) DecrementWindow() {
-	if d.Offset > d.Limit {
-		d.Offset = d.Offset - d.Limit
-	} else if d.Offset > 1 && d.Offset < d.Limit {
-		d.Offset = 1
+	if d.offset > d.Limit {
+		d.offset = d.offset - d.Limit
+	} else if d.offset > 1 && d.offset < d.Limit {
+		d.offset = 1
 	}
 }
 
 func (d *Drawer) Get() (string, error) {
-	scan := bufio.NewScanner(strings.NewReader(d.Text))
+	scan := bufio.NewScanner(strings.NewReader(d.text))
 	var (
 		lines []string
 		i     int
 	)
 	for scan.Scan() {
 		i++
-		if i < d.Offset {
+		if i < d.offset {
 			continue
-		} else if i >= d.Limit+d.Offset {
+		} else if i >= d.Limit+d.offset {
 			break
 		}
 		lines = append(lines, scan.Text())

@@ -25,8 +25,8 @@ func TestIncrement(t *testing.T) {
 		d.Max = tt.max
 
 		d.Increment()
-		if d.Offset != tt.expected {
-			t.Errorf("expected=%d, got=%d", tt.expected, d.Offset)
+		if d.GetOffset() != tt.expected {
+			t.Errorf("expected=%d, got=%d", tt.expected, d.GetOffset())
 		}
 	}
 }
@@ -50,8 +50,8 @@ func TestIncrementHalf(t *testing.T) {
 		d.Max = tt.max
 
 		d.IncrementHalf()
-		if d.Offset != tt.expected {
-			t.Errorf("expected=%d, got=%d", tt.expected, d.Offset)
+		if d.GetOffset() != tt.expected {
+			t.Errorf("expected=%d, got=%d", tt.expected, d.GetOffset())
 		}
 	}
 }
@@ -74,8 +74,8 @@ func TestDecrementHalf(t *testing.T) {
 		d.Max = tt.max
 
 		d.DecrementHalf()
-		if d.Offset != tt.expected {
-			t.Errorf("expected=%d, got=%d", tt.expected, d.Offset)
+		if d.GetOffset() != tt.expected {
+			t.Errorf("expected=%d, got=%d", tt.expected, d.GetOffset())
 		}
 	}
 }
@@ -98,8 +98,8 @@ func TestIncrementWindow(t *testing.T) {
 		d.Max = tt.max
 
 		d.IncrementWindow()
-		if d.Offset != tt.expected {
-			t.Errorf("expected=%d, got=%d", tt.expected, d.Offset)
+		if d.GetOffset() != tt.expected {
+			t.Errorf("expected=%d, got=%d", tt.expected, d.GetOffset())
 		}
 	}
 }
@@ -122,8 +122,8 @@ func TestDecrementWindow(t *testing.T) {
 		d.Max = tt.max
 
 		d.DecrementWindow()
-		if d.Offset != tt.expected {
-			t.Errorf("expected=%d, got=%d", tt.expected, d.Offset)
+		if d.GetOffset() != tt.expected {
+			t.Errorf("expected=%d, got=%d", tt.expected, d.GetOffset())
 		}
 	}
 }
@@ -132,8 +132,8 @@ func TestDecrement(t *testing.T) {
 	d := drawer.New("test", 10)
 	d.Decrement()
 
-	if d.Offset != 9 {
-		t.Errorf("expected=0, got=%d", d.Offset)
+	if d.GetOffset() != 9 {
+		t.Errorf("expected=0, got=%d", d.GetOffset())
 	}
 }
 
