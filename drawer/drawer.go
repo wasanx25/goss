@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	runewidth "github.com/mattn/go-runewidth"
+	"github.com/wasanx25/goss/event"
 )
 
 type Drawer struct {
@@ -37,6 +38,23 @@ func New(text string, offset int) *Drawer {
 
 func (d *Drawer) GetOffset() int {
 	return d.offset
+}
+
+func (d *Drawer) AddOffset(e event.Type) {
+	switch e {
+	case event.PageDown:
+		d.Increment()
+	case event.PageUp:
+		d.Decrement()
+	case event.PageDownHalf:
+		d.IncrementHalf()
+	case event.PageUpHalf:
+		d.DecrementHalf()
+	case event.PageDownScreen:
+		d.IncrementWindow()
+	case event.PageUpScreen:
+		d.DecrementWindow()
+	}
 }
 
 func (d *Drawer) Increment() {

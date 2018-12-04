@@ -66,26 +66,8 @@ func (v *Viewer) Start() {
 		for {
 			select {
 			case t := <-v.Event.DrawCh:
-				switch t {
-				case event.PageDown:
-					v.Drawer.Increment()
-					v.rewrite()
-				case event.PageUp:
-					v.Drawer.Decrement()
-					v.rewrite()
-				case event.PageDownHalf:
-					v.Drawer.IncrementHalf()
-					v.rewrite()
-				case event.PageUpHalf:
-					v.Drawer.DecrementHalf()
-					v.rewrite()
-				case event.PageDownScreen:
-					v.Drawer.IncrementWindow()
-					v.rewrite()
-				case event.PageUpScreen:
-					v.Drawer.DecrementWindow()
-					v.rewrite()
-				}
+				v.Drawer.AddOffset(t)
+				v.rewrite()
 			case <-v.Event.ResizeCh:
 				v.Window.SetSize()
 				v.Drawer.Limit = int(v.Window.Row)
