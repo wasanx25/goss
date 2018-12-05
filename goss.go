@@ -10,7 +10,10 @@ func Run(text string) error {
 	if err := v.Init(); err != nil {
 		return err
 	}
-	v.Start()
+
+	if err := v.Start(); err != nil {
+		return err
+	}
 
 	return nil
 }
