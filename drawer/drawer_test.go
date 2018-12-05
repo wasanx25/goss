@@ -6,6 +6,7 @@ import (
 	"github.com/wasanx25/goss/drawer"
 )
 
+// pageDown is private method. export_test.go is necessary to run below test
 func TestPageDown(t *testing.T) {
 	tests := []struct {
 		max      int
@@ -31,6 +32,7 @@ func TestPageDown(t *testing.T) {
 	}
 }
 
+// pageUp is private method. export_test.go is necessary to run below test
 func TestPageUp(t *testing.T) {
 	d := drawer.New("test", 10)
 	drawer.PageUp(d)
@@ -40,6 +42,7 @@ func TestPageUp(t *testing.T) {
 	}
 }
 
+// pageDownHalf is private method. export_test.go is necessary to run below test
 func TestPageDownHalf(t *testing.T) {
 	tests := []struct {
 		max      int
@@ -65,6 +68,7 @@ func TestPageDownHalf(t *testing.T) {
 	}
 }
 
+// pageUpHalf is private method. export_test.go is necessary to run below test
 func TestPageUpHalf(t *testing.T) {
 	tests := []struct {
 		max      int
@@ -89,6 +93,7 @@ func TestPageUpHalf(t *testing.T) {
 	}
 }
 
+// pageDownWindow is private method. export_test.go is necessary to run below test
 func TestPageDownWindow(t *testing.T) {
 	tests := []struct {
 		max      int
@@ -113,6 +118,7 @@ func TestPageDownWindow(t *testing.T) {
 	}
 }
 
+// pageUpWindow is private method. export_test.go is necessary to run below test
 func TestPageUpWindow(t *testing.T) {
 	tests := []struct {
 		max      int
