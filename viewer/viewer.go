@@ -29,7 +29,11 @@ func New(text string) *Viewer {
 }
 
 func (v *Viewer) Init() error {
-	v.Window.SetSize()
+	err := v.Window.SetSize()
+	if err != nil {
+		err = fmt.Errorf("(*Window).SetSize() error: %s", err)
+		return err
+	}
 	v.Drawer.Limit = int(v.Window.Row)
 
 	tui, err := tcell.NewScreen()
@@ -52,7 +56,7 @@ func (v *Viewer) Init() error {
 	return nil
 }
 
-func (v *Viewer) Start() {
+func (v *Viewer) Start() (err error) {
 	v.write()
 
 	v.Tui.Show()
@@ -69,7 +73,11 @@ func (v *Viewer) Start() {
 				v.Drawer.AddOffset(t)
 				v.rewrite()
 			case <-v.Event.ResizeCh:
-				v.Window.SetSize()
+				err = v.Window.SetSize()
+				if err != nil {
+					err = fmt.Errorf("(*Window).SetSize() error: %s", err)
+					v.Event.DoneCh <- struct{}{}
+				}
 				v.Drawer.Limit = int(v.Window.Row)
 				v.rewrite()
 			}
@@ -78,6 +86,7 @@ func (v *Viewer) Start() {
 	<-v.Event.DoneCh
 
 	v.Tui.Fini()
+	return
 }
 
 func (v *Viewer) rewrite() {
