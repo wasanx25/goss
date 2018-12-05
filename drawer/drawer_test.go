@@ -6,7 +6,7 @@ import (
 	"github.com/wasanx25/goss/drawer"
 )
 
-func TestIncrement(t *testing.T) {
+func TestPageDown(t *testing.T) {
 	tests := []struct {
 		max      int
 		offset   int
@@ -24,14 +24,14 @@ func TestIncrement(t *testing.T) {
 		d.Limit = tt.limit
 		d.Max = tt.max
 
-		d.Increment()
+		drawer.PageDown(d)
 		if d.GetOffset() != tt.expected {
 			t.Errorf("expected=%d, got=%d", tt.expected, d.GetOffset())
 		}
 	}
 }
 
-func TestIncrementHalf(t *testing.T) {
+func TestPageDownHalf(t *testing.T) {
 	tests := []struct {
 		max      int
 		offset   int
@@ -49,14 +49,14 @@ func TestIncrementHalf(t *testing.T) {
 		d.Limit = tt.limit
 		d.Max = tt.max
 
-		d.IncrementHalf()
+		drawer.PageDownHalf(d)
 		if d.GetOffset() != tt.expected {
 			t.Errorf("expected=%d, got=%d", tt.expected, d.GetOffset())
 		}
 	}
 }
 
-func TestDecrementHalf(t *testing.T) {
+func TestPageUpHalf(t *testing.T) {
 	tests := []struct {
 		max      int
 		offset   int
@@ -73,14 +73,14 @@ func TestDecrementHalf(t *testing.T) {
 		d.Limit = tt.limit
 		d.Max = tt.max
 
-		d.DecrementHalf()
+		drawer.PageUpHalf(d)
 		if d.GetOffset() != tt.expected {
 			t.Errorf("expected=%d, got=%d", tt.expected, d.GetOffset())
 		}
 	}
 }
 
-func TestIncrementWindow(t *testing.T) {
+func TestPageDownWindow(t *testing.T) {
 	tests := []struct {
 		max      int
 		offset   int
@@ -97,14 +97,14 @@ func TestIncrementWindow(t *testing.T) {
 		d.Limit = tt.limit
 		d.Max = tt.max
 
-		d.IncrementWindow()
+		drawer.PageDownWindow(d)
 		if d.GetOffset() != tt.expected {
 			t.Errorf("expected=%d, got=%d", tt.expected, d.GetOffset())
 		}
 	}
 }
 
-func TestDecrementWindow(t *testing.T) {
+func TestPageUpWindow(t *testing.T) {
 	tests := []struct {
 		max      int
 		offset   int
@@ -121,16 +121,16 @@ func TestDecrementWindow(t *testing.T) {
 		d.Limit = tt.limit
 		d.Max = tt.max
 
-		d.DecrementWindow()
+		drawer.PageUpWindow(d)
 		if d.GetOffset() != tt.expected {
 			t.Errorf("expected=%d, got=%d", tt.expected, d.GetOffset())
 		}
 	}
 }
 
-func TestDecrement(t *testing.T) {
+func TestPageUp(t *testing.T) {
 	d := drawer.New("test", 10)
-	d.Decrement()
+	drawer.PageUp(d)
 
 	if d.GetOffset() != 9 {
 		t.Errorf("expected=0, got=%d", d.GetOffset())

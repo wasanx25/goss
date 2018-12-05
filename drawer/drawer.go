@@ -43,21 +43,21 @@ func (d *Drawer) GetOffset() int {
 func (d *Drawer) AddOffset(e event.Type) {
 	switch e {
 	case event.PageDown:
-		d.Increment()
+		d.pageDown()
 	case event.PageUp:
-		d.Decrement()
+		d.pageUp()
 	case event.PageDownHalf:
-		d.IncrementHalf()
+		d.pageDownHalf()
 	case event.PageUpHalf:
-		d.DecrementHalf()
+		d.pageUpHalf()
 	case event.PageDownScreen:
-		d.IncrementWindow()
+		d.pageDownWindow()
 	case event.PageUpScreen:
-		d.DecrementWindow()
+		d.pageUpWindow()
 	}
 }
 
-func (d *Drawer) Increment() {
+func (d *Drawer) pageDown() {
 	if d.Max < d.Limit {
 		return
 	}
@@ -67,13 +67,13 @@ func (d *Drawer) Increment() {
 	}
 }
 
-func (d *Drawer) Decrement() {
+func (d *Drawer) pageUp() {
 	if d.offset > 1 {
 		d.offset--
 	}
 }
 
-func (d *Drawer) IncrementHalf() {
+func (d *Drawer) pageDownHalf() {
 	if d.Max > d.offset+d.Limit/2*3 {
 		d.offset = d.offset + d.Limit/2
 	} else if d.offset+d.Limit < d.Max {
@@ -81,7 +81,7 @@ func (d *Drawer) IncrementHalf() {
 	}
 }
 
-func (d *Drawer) DecrementHalf() {
+func (d *Drawer) pageUpHalf() {
 	if d.offset > d.Limit/2 {
 		d.offset = d.offset - d.Limit/2
 	} else if d.offset > 1 && d.offset < d.Limit/2 {
@@ -89,7 +89,7 @@ func (d *Drawer) DecrementHalf() {
 	}
 }
 
-func (d *Drawer) IncrementWindow() {
+func (d *Drawer) pageDownWindow() {
 	if d.Max > d.offset+d.Limit*2 {
 		d.offset = d.offset + d.Limit
 	} else if d.offset+d.Limit < d.Max {
@@ -97,7 +97,7 @@ func (d *Drawer) IncrementWindow() {
 	}
 }
 
-func (d *Drawer) DecrementWindow() {
+func (d *Drawer) pageUpWindow() {
 	if d.offset > d.Limit {
 		d.offset = d.offset - d.Limit
 	} else if d.offset > 1 && d.offset < d.Limit {
