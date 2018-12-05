@@ -31,6 +31,15 @@ func TestPageDown(t *testing.T) {
 	}
 }
 
+func TestPageUp(t *testing.T) {
+	d := drawer.New("test", 10)
+	drawer.PageUp(d)
+
+	if d.GetOffset() != 9 {
+		t.Errorf("expected=0, got=%d", d.GetOffset())
+	}
+}
+
 func TestPageDownHalf(t *testing.T) {
 	tests := []struct {
 		max      int
@@ -125,15 +134,6 @@ func TestPageUpWindow(t *testing.T) {
 		if d.GetOffset() != tt.expected {
 			t.Errorf("expected=%d, got=%d", tt.expected, d.GetOffset())
 		}
-	}
-}
-
-func TestPageUp(t *testing.T) {
-	d := drawer.New("test", 10)
-	drawer.PageUp(d)
-
-	if d.GetOffset() != 9 {
-		t.Errorf("expected=0, got=%d", d.GetOffset())
 	}
 }
 
