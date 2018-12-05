@@ -25,9 +25,9 @@ const (
 
 func New() *Event {
 	return &Event{
-		DrawCh:   make(chan Type, 0),
-		DoneCh:   make(chan struct{}, 0),
-		ResizeCh: make(chan struct{}, 0),
+		DrawCh:   make(chan Type),
+		DoneCh:   make(chan struct{}),
+		ResizeCh: make(chan struct{}),
 	}
 }
 
