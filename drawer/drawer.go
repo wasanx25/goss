@@ -54,6 +54,10 @@ func (d *Drawer) AddOffset(e event.Type) {
 		d.pageDownWindow()
 	case event.PageUpScreen:
 		d.pageUpWindow()
+	case event.PageEnd:
+		d.pageEnd()
+	case event.PageTop:
+		d.pageTop()
 	}
 }
 
@@ -103,6 +107,14 @@ func (d *Drawer) pageUpWindow() {
 	} else if d.offset > 1 && d.offset < d.Limit {
 		d.offset = 1
 	}
+}
+
+func (d *Drawer) pageEnd() {
+	d.offset = d.Max - d.Limit
+}
+
+func (d *Drawer) pageTop() {
+	d.offset = 0
 }
 
 func (d *Drawer) Get() (string, error) {

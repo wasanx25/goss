@@ -6,3 +6,5 @@ var PageDownHalf = (*Drawer).pageDownHalf
 var PageUpHalf = (*Drawer).pageUpHalf
 var PageDownWindow = (*Drawer).pageDownWindow
 var PageUpWindow = (*Drawer).pageUpWindow
+var PageEnd = (*Drawer).pageEnd
+var PageTop = (*Drawer).pageTop

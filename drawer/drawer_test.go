@@ -143,6 +143,27 @@ func TestPageUpWindow(t *testing.T) {
 	}
 }
 
+// pageEnd is private method. export_test.go is necessary to run below test
+func TestPageEnd(t *testing.T) {
+	d := drawer.New("test\nlong\ntext\ntest", 10)
+	d.Limit = 2
+	drawer.PageEnd(d)
+
+	if d.GetOffset() != (3 - 2) {
+		t.Errorf("expected=1, got=%d", d.GetOffset())
+	}
+}
+
+// pageTop is private method. export_test.go is necessary to run below test
+func TestPageTop(t *testing.T) {
+	d := drawer.New("test", 10)
+	drawer.PageTop(d)
+
+	if d.GetOffset() != 0 {
+		t.Errorf("expected=0, got=%d", d.GetOffset())
+	}
+}
+
 func TestGet(t *testing.T) {
 	tests := []struct {
 		text     string

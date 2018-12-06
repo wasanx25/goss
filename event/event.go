@@ -54,6 +54,8 @@ func (e *Event) Action(tui tcell.Screen) {
 			e.DrawCh <- PageDown
 		case 'q':
 			e.DoneCh <- struct{}{}
+		case 'g':
+			e.DrawCh <- PageTop
 		case 'G':
 			e.DrawCh <- PageEnd
 		}
