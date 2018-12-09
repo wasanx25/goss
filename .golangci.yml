@@ -1,0 +1,13 @@
+linters-settings:
+  govet:
+    check-shadowing: true
+  gofmt:
+    simplify: true
+  gocyclo:
+    min-complexity: 10
+  maligned:
+    suggest-new: true
+  misspell:
+    locale: US
+  lll:
+    line-length: 140
