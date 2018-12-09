@@ -117,7 +117,7 @@ func (d *Drawer) pageTop() {
 	d.offset = 0
 }
 
-func (d *Drawer) Get() (string, error) {
+func (d *Drawer) GetContent() (string, error) {
 	scan := bufio.NewScanner(strings.NewReader(d.text))
 	var (
 		lines []string

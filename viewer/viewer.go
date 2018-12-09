@@ -97,7 +97,7 @@ func (v *Viewer) rewrite() {
 
 func (v *Viewer) write() {
 	v.Drawer.InitPosition()
-	str, _ := v.Drawer.Get()
+	str, _ := v.Drawer.GetContent()
 	for _, s := range str {
 		if v.Drawer.Position.Col >= int(v.Window.Col) {
 			v.Drawer.Break()

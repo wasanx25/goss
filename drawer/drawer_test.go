@@ -164,7 +164,7 @@ func TestPageTop(t *testing.T) {
 	}
 }
 
-func TestGet(t *testing.T) {
+func TestGetContent(t *testing.T) {
 	tests := []struct {
 		text     string
 		offset   int
@@ -181,7 +181,7 @@ func TestGet(t *testing.T) {
 	for _, tt := range tests {
 		d := drawer.New(tt.text, tt.offset)
 		d.Limit = tt.limit
-		result, err := d.Get()
+		result, err := d.GetContent()
 
 		if err != nil {
 			t.Fatal(err)
