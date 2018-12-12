@@ -22,7 +22,7 @@ func TestPageDown(t *testing.T) {
 
 	for _, tt := range tests {
 		d := drawer.New("test", tt.offset)
-		d.Limit = tt.limit
+		d.SetLimit(tt.limit)
 		d.Max = tt.max
 
 		drawer.PageDown(d)
@@ -58,7 +58,7 @@ func TestPageDownHalf(t *testing.T) {
 
 	for _, tt := range tests {
 		d := drawer.New("test", tt.offset)
-		d.Limit = tt.limit
+		d.SetLimit(tt.limit)
 		d.Max = tt.max
 
 		drawer.PageDownHalf(d)
@@ -83,7 +83,7 @@ func TestPageUpHalf(t *testing.T) {
 
 	for _, tt := range tests {
 		d := drawer.New("test", tt.offset)
-		d.Limit = tt.limit
+		d.SetLimit(tt.limit)
 		d.Max = tt.max
 
 		drawer.PageUpHalf(d)
@@ -108,7 +108,7 @@ func TestPageDownWindow(t *testing.T) {
 
 	for _, tt := range tests {
 		d := drawer.New("test", tt.offset)
-		d.Limit = tt.limit
+		d.SetLimit(tt.limit)
 		d.Max = tt.max
 
 		drawer.PageDownWindow(d)
@@ -133,7 +133,7 @@ func TestPageUpWindow(t *testing.T) {
 
 	for _, tt := range tests {
 		d := drawer.New("test", tt.offset)
-		d.Limit = tt.limit
+		d.SetLimit(tt.limit)
 		d.Max = tt.max
 
 		drawer.PageUpWindow(d)
@@ -146,7 +146,7 @@ func TestPageUpWindow(t *testing.T) {
 // pageEnd is private method. export_test.go is necessary to run below test
 func TestPageEnd(t *testing.T) {
 	d := drawer.New("test\nlong\ntext\ntest", 10)
-	d.Limit = 2
+	d.SetLimit(2)
 	drawer.PageEnd(d)
 
 	if d.GetOffset() != (3 - 2) {
@@ -180,7 +180,7 @@ func TestGetContent(t *testing.T) {
 
 	for _, tt := range tests {
 		d := drawer.New(tt.text, tt.offset)
-		d.Limit = tt.limit
+		d.SetLimit(tt.limit)
 		result, err := d.GetContent()
 
 		if err != nil {

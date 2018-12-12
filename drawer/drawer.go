@@ -11,7 +11,7 @@ import (
 type Drawer struct {
 	text     string
 	offset   int
-	Limit    int
+	limit    int
 	Max      int
 	Position DrawPosition
 }
@@ -40,6 +40,14 @@ func (d *Drawer) GetOffset() int {
 	return d.offset
 }
 
+func (d *Drawer) Limit() int {
+	return d.limit
+}
+
+func (d *Drawer) SetLimit(limit int) {
+	d.limit = limit
+}
+
 func (d *Drawer) AddOffset(e event.Type) {
 	switch e {
 	case event.PageDown:
@@ -62,11 +70,11 @@ func (d *Drawer) AddOffset(e event.Type) {
 }
 
 func (d *Drawer) pageDown() {
-	if d.Max < d.Limit {
+	if d.Max < d.limit {
 		return
 	}
 
-	if d.Limit+d.offset < d.Max {
+	if d.limit+d.offset < d.Max {
 		d.offset++
 	}
 }
@@ -78,39 +86,39 @@ func (d *Drawer) pageUp() {
 }
 
 func (d *Drawer) pageDownHalf() {
-	if d.Max > d.offset+d.Limit/2*3 {
-		d.offset = d.offset + d.Limit/2
-	} else if d.offset+d.Limit < d.Max {
-		d.offset = d.Max - d.Limit
+	if d.Max > d.offset+d.limit/2*3 {
+		d.offset = d.offset + d.limit/2
+	} else if d.offset+d.limit < d.Max {
+		d.offset = d.Max - d.limit
 	}
 }
 
 func (d *Drawer) pageUpHalf() {
-	if d.offset > d.Limit/2 {
-		d.offset = d.offset - d.Limit/2
-	} else if d.offset > 1 && d.offset < d.Limit/2 {
+	if d.offset > d.limit/2 {
+		d.offset = d.offset - d.limit/2
+	} else if d.offset > 1 && d.offset < d.limit/2 {
 		d.offset = 1
 	}
 }
 
 func (d *Drawer) pageDownWindow() {
-	if d.Max > d.offset+d.Limit*2 {
-		d.offset = d.offset + d.Limit
-	} else if d.offset+d.Limit < d.Max {
-		d.offset = d.Max - d.Limit
+	if d.Max > d.offset+d.limit*2 {
+		d.offset = d.offset + d.limit
+	} else if d.offset+d.limit < d.Max {
+		d.offset = d.Max - d.limit
 	}
 }
 
 func (d *Drawer) pageUpWindow() {
-	if d.offset > d.Limit {
-		d.offset = d.offset - d.Limit
-	} else if d.offset > 1 && d.offset < d.Limit {
+	if d.offset > d.limit {
+		d.offset = d.offset - d.limit
+	} else if d.offset > 1 && d.offset < d.limit {
 		d.offset = 1
 	}
 }
 
 func (d *Drawer) pageEnd() {
-	d.offset = d.Max - d.Limit
+	d.offset = d.Max - d.limit
 }
 
 func (d *Drawer) pageTop() {
@@ -127,7 +135,7 @@ func (d *Drawer) GetContent() (string, error) {
 		i++
 		if i < d.offset {
 			continue
-		} else if i >= d.Limit+d.offset {
+		} else if i >= d.limit+d.offset {
 			break
 		}
 		lines = append(lines, scan.Text())

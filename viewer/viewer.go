@@ -50,7 +50,8 @@ func (v *Viewer) Start() (err error) {
 	v.write()
 
 	v.Tui.Show()
-	_, v.Drawer.Limit = v.Tui.Size()
+	_, height := v.Tui.Size()
+	v.Drawer.SetLimit(height)
 
 	go func() {
 		for {
@@ -65,7 +66,8 @@ func (v *Viewer) Start() (err error) {
 				v.Drawer.AddOffset(t)
 				v.rewrite()
 			case <-v.Event.ResizeCh:
-				_, v.Drawer.Limit = v.Tui.Size()
+				_, height = v.Tui.Size()
+				v.Drawer.SetLimit(height)
 				v.rewrite()
 			}
 		}
