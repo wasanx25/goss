@@ -26,8 +26,8 @@ func TestPageDown(t *testing.T) {
 		d.Max = tt.max
 
 		drawer.PageDown(d)
-		if d.GetOffset() != tt.expected {
-			t.Errorf("expected=%d, got=%d", tt.expected, d.GetOffset())
+		if d.Offset() != tt.expected {
+			t.Errorf("expected=%d, got=%d", tt.expected, d.Offset())
 		}
 	}
 }
@@ -37,8 +37,8 @@ func TestPageUp(t *testing.T) {
 	d := drawer.New("test", 10)
 	drawer.PageUp(d)
 
-	if d.GetOffset() != 9 {
-		t.Errorf("expected=0, got=%d", d.GetOffset())
+	if d.Offset() != 9 {
+		t.Errorf("expected=0, got=%d", d.Offset())
 	}
 }
 
@@ -62,8 +62,8 @@ func TestPageDownHalf(t *testing.T) {
 		d.Max = tt.max
 
 		drawer.PageDownHalf(d)
-		if d.GetOffset() != tt.expected {
-			t.Errorf("expected=%d, got=%d", tt.expected, d.GetOffset())
+		if d.Offset() != tt.expected {
+			t.Errorf("expected=%d, got=%d", tt.expected, d.Offset())
 		}
 	}
 }
@@ -87,8 +87,8 @@ func TestPageUpHalf(t *testing.T) {
 		d.Max = tt.max
 
 		drawer.PageUpHalf(d)
-		if d.GetOffset() != tt.expected {
-			t.Errorf("expected=%d, got=%d", tt.expected, d.GetOffset())
+		if d.Offset() != tt.expected {
+			t.Errorf("expected=%d, got=%d", tt.expected, d.Offset())
 		}
 	}
 }
@@ -112,8 +112,8 @@ func TestPageDownWindow(t *testing.T) {
 		d.Max = tt.max
 
 		drawer.PageDownWindow(d)
-		if d.GetOffset() != tt.expected {
-			t.Errorf("expected=%d, got=%d", tt.expected, d.GetOffset())
+		if d.Offset() != tt.expected {
+			t.Errorf("expected=%d, got=%d", tt.expected, d.Offset())
 		}
 	}
 }
@@ -137,8 +137,8 @@ func TestPageUpWindow(t *testing.T) {
 		d.Max = tt.max
 
 		drawer.PageUpWindow(d)
-		if d.GetOffset() != tt.expected {
-			t.Errorf("expected=%d, got=%d", tt.expected, d.GetOffset())
+		if d.Offset() != tt.expected {
+			t.Errorf("expected=%d, got=%d", tt.expected, d.Offset())
 		}
 	}
 }
@@ -149,8 +149,8 @@ func TestPageEnd(t *testing.T) {
 	d.SetLimit(2)
 	drawer.PageEnd(d)
 
-	if d.GetOffset() != (3 - 2) {
-		t.Errorf("expected=1, got=%d", d.GetOffset())
+	if d.Offset() != (3 - 2) {
+		t.Errorf("expected=1, got=%d", d.Offset())
 	}
 }
 
@@ -159,8 +159,8 @@ func TestPageTop(t *testing.T) {
 	d := drawer.New("test", 10)
 	drawer.PageTop(d)
 
-	if d.GetOffset() != 0 {
-		t.Errorf("expected=0, got=%d", d.GetOffset())
+	if d.Offset() != 0 {
+		t.Errorf("expected=0, got=%d", d.Offset())
 	}
 }
 

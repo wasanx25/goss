@@ -36,7 +36,7 @@ func New(text string, offset int) *Drawer {
 	}
 }
 
-func (d *Drawer) GetOffset() int {
+func (d *Drawer) Offset() int {
 	return d.offset
 }
 
