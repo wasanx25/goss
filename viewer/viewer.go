@@ -2,6 +2,7 @@ package viewer
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/gdamore/tcell"
 
@@ -18,7 +19,7 @@ type Viewer struct {
 
 func New(text string) *Viewer {
 	manager := &Viewer{
-		drawer: drawer.New(text, 0),
+		drawer: drawer.New(text, 0, strings.Count(text, "\n")),
 		event:  event.New(),
 	}
 

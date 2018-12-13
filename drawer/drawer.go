@@ -12,7 +12,7 @@ type Drawer struct {
 	text     string
 	offset   int
 	limit    int
-	Max      int
+	max      int
 	position drawPosition
 }
 
@@ -27,12 +27,11 @@ const (
 	SPACE    = ' '
 )
 
-func New(text string, offset int) *Drawer {
-	max := strings.Count(text, "\n")
+func New(text string, offset int, max int) *Drawer {
 	return &Drawer{
 		text:   text,
 		offset: offset,
-		Max:    max,
+		max:    max,
 	}
 }
 
@@ -70,11 +69,11 @@ func (d *Drawer) AddOffset(e event.Type) {
 }
 
 func (d *Drawer) pageDown() {
-	if d.Max < d.limit {
+	if d.max < d.limit {
 		return
 	}
 
-	if d.limit+d.offset < d.Max {
+	if d.limit+d.offset < d.max {
 		d.offset++
 	}
 }
@@ -86,10 +85,10 @@ func (d *Drawer) pageUp() {
 }
 
 func (d *Drawer) pageDownHalf() {
-	if d.Max > d.offset+d.limit/2*3 {
+	if d.max > d.offset+d.limit/2*3 {
 		d.offset = d.offset + d.limit/2
-	} else if d.offset+d.limit < d.Max {
-		d.offset = d.Max - d.limit
+	} else if d.offset+d.limit < d.max {
+		d.offset = d.max - d.limit
 	}
 }
 
@@ -102,10 +101,10 @@ func (d *Drawer) pageUpHalf() {
 }
 
 func (d *Drawer) pageDownWindow() {
-	if d.Max > d.offset+d.limit*2 {
+	if d.max > d.offset+d.limit*2 {
 		d.offset = d.offset + d.limit
-	} else if d.offset+d.limit < d.Max {
-		d.offset = d.Max - d.limit
+	} else if d.offset+d.limit < d.max {
+		d.offset = d.max - d.limit
 	}
 }
 
@@ -118,7 +117,7 @@ func (d *Drawer) pageUpWindow() {
 }
 
 func (d *Drawer) pageEnd() {
-	d.offset = d.Max - d.limit
+	d.offset = d.max - d.limit
 }
 
 func (d *Drawer) pageTop() {

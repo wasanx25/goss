@@ -1,6 +1,7 @@
 package drawer_test
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/wasanx25/goss/drawer"
@@ -21,9 +22,8 @@ func TestPageDown(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		d := drawer.New("test", tt.offset)
+		d := drawer.New("test", tt.offset, tt.max)
 		d.SetLimit(tt.limit)
-		d.Max = tt.max
 
 		drawer.PageDown(d)
 		if d.Offset() != tt.expected {
@@ -34,7 +34,7 @@ func TestPageDown(t *testing.T) {
 
 // pageUp is private method. export_test.go is necessary to run below test
 func TestPageUp(t *testing.T) {
-	d := drawer.New("test", 10)
+	d := drawer.New("test", 10, 1)
 	drawer.PageUp(d)
 
 	if d.Offset() != 9 {
@@ -57,9 +57,8 @@ func TestPageDownHalf(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		d := drawer.New("test", tt.offset)
+		d := drawer.New("test", tt.offset, tt.max)
 		d.SetLimit(tt.limit)
-		d.Max = tt.max
 
 		drawer.PageDownHalf(d)
 		if d.Offset() != tt.expected {
@@ -82,9 +81,8 @@ func TestPageUpHalf(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		d := drawer.New("test", tt.offset)
+		d := drawer.New("test", tt.offset, tt.max)
 		d.SetLimit(tt.limit)
-		d.Max = tt.max
 
 		drawer.PageUpHalf(d)
 		if d.Offset() != tt.expected {
@@ -107,9 +105,8 @@ func TestPageDownWindow(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		d := drawer.New("test", tt.offset)
+		d := drawer.New("test", tt.offset, tt.max)
 		d.SetLimit(tt.limit)
-		d.Max = tt.max
 
 		drawer.PageDownWindow(d)
 		if d.Offset() != tt.expected {
@@ -132,9 +129,8 @@ func TestPageUpWindow(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		d := drawer.New("test", tt.offset)
+		d := drawer.New("test", tt.offset, tt.max)
 		d.SetLimit(tt.limit)
-		d.Max = tt.max
 
 		drawer.PageUpWindow(d)
 		if d.Offset() != tt.expected {
@@ -145,7 +141,7 @@ func TestPageUpWindow(t *testing.T) {
 
 // pageEnd is private method. export_test.go is necessary to run below test
 func TestPageEnd(t *testing.T) {
-	d := drawer.New("test\nlong\ntext\ntest", 10)
+	d := drawer.New("test\nlong\ntext\ntest", 10, 3)
 	d.SetLimit(2)
 	drawer.PageEnd(d)
 
@@ -156,7 +152,7 @@ func TestPageEnd(t *testing.T) {
 
 // pageTop is private method. export_test.go is necessary to run below test
 func TestPageTop(t *testing.T) {
-	d := drawer.New("test", 10)
+	d := drawer.New("test", 10, 0)
 	drawer.PageTop(d)
 
 	if d.Offset() != 0 {
@@ -179,7 +175,7 @@ func TestGetContent(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		d := drawer.New(tt.text, tt.offset)
+		d := drawer.New(tt.text, tt.offset, strings.Count(tt.text, "\n"))
 		d.SetLimit(tt.limit)
 		result, err := d.GetContent()
 
@@ -205,7 +201,7 @@ func TestAddPosition(t *testing.T) {
 		{'か', 3, 0},
 	}
 
-	d := drawer.New("", 0) // dummy args
+	d := drawer.New("", 0, 0) // dummy args
 	d.InitPosition()
 	for _, tt := range tests {
 		d.AddPosition(tt.args)
@@ -225,7 +221,7 @@ func TestAddPosition(t *testing.T) {
 }
 
 func TestInitPosition(t *testing.T) {
-	d := drawer.New("", 0) // dummy args
+	d := drawer.New("", 0, 0) // dummy args
 	d.InitPosition()
 
 	col, row := d.Position()
@@ -240,7 +236,7 @@ func TestInitPosition(t *testing.T) {
 }
 
 func TestBreak(t *testing.T) {
-	d := drawer.New("", 0) // dummy args
+	d := drawer.New("", 0, 0) // dummy args
 	d.Break()
 
 	col, row := d.Position()
