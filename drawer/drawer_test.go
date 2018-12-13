@@ -200,24 +200,27 @@ func TestAddPosition(t *testing.T) {
 		expectRow int
 	}{
 		{'\n', 1, 1},
-		{'\t', 4, 0},
-		{'a', 1, 0},
-		{'か', 2, 0},
+		{'\t', 5, 0},
+		{'a', 2, 0},
+		{'か', 3, 0},
 	}
 
 	d := drawer.New("", 0) // dummy args
+	d.InitPosition()
 	for _, tt := range tests {
 		d.AddPosition(tt.args)
 
-		if d.Position.Col != tt.expectCol {
-			t.Errorf(string(tt.args)+" is expected=%d, got=%d", tt.expectCol, d.Position.Col)
+		col, row := d.Position()
+
+		if col != tt.expectCol {
+			t.Errorf(string(tt.args)+" is expected=%d, got=%d", tt.expectCol, col)
 		}
 
-		if d.Position.Row != tt.expectRow {
-			t.Errorf(string(tt.args)+" is expected=%d, got=%d", tt.expectRow, d.Position.Row)
+		if row != tt.expectRow {
+			t.Errorf(string(tt.args)+" is expected=%d, got=%d", tt.expectRow, row)
 		}
 
-		d.Position.Row, d.Position.Col = 0, 0 // reset
+		d.InitPosition() // reset
 	}
 }
 
@@ -225,12 +228,14 @@ func TestInitPosition(t *testing.T) {
 	d := drawer.New("", 0) // dummy args
 	d.InitPosition()
 
-	if d.Position.Col != 1 {
-		t.Errorf("expected=%d, got=%d", 1, d.Position.Col)
+	col, row := d.Position()
+
+	if col != 1 {
+		t.Errorf("expected=%d, got=%d", 1, col)
 	}
 
-	if d.Position.Row != 0 {
-		t.Errorf("expected=%d, got=%d", 0, d.Position.Row)
+	if row != 0 {
+		t.Errorf("expected=%d, got=%d", 0, row)
 	}
 }
 
@@ -238,11 +243,13 @@ func TestBreak(t *testing.T) {
 	d := drawer.New("", 0) // dummy args
 	d.Break()
 
-	if d.Position.Col != 1 {
-		t.Errorf("expected=%d, got=%d", 1, d.Position.Col)
+	col, row := d.Position()
+
+	if col != 1 {
+		t.Errorf("expected=%d, got=%d", 1, col)
 	}
 
-	if d.Position.Row != 1 {
-		t.Errorf("expected=%d, got=%d", 1, d.Position.Row)
+	if row != 1 {
+		t.Errorf("expected=%d, got=%d", 1, row)
 	}
 }

@@ -89,12 +89,13 @@ func (v *Viewer) write() {
 	str, _ := v.drawer.GetContent()
 	width, height := v.tui.Size()
 	for _, s := range str {
-		if v.drawer.Position.Col >= width {
+		col, row := v.drawer.Position()
+		if col >= width {
 			v.drawer.Break()
 		}
-		v.tui.SetContent(v.drawer.Position.Col, v.drawer.Position.Row, s, nil, tcell.StyleDefault)
+		v.tui.SetContent(col, row, s, nil, tcell.StyleDefault)
 		v.drawer.AddPosition(s)
-		if height < v.drawer.Position.Row {
+		if height < row {
 			break
 		}
 	}

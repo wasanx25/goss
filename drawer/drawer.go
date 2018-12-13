@@ -13,7 +13,7 @@ type Drawer struct {
 	offset   int
 	limit    int
 	Max      int
-	Position DrawPosition
+	position DrawPosition
 }
 
 type DrawPosition struct {
@@ -147,24 +147,28 @@ func (d *Drawer) GetContent() (string, error) {
 	return strings.Join(lines, "\n"), nil
 }
 
+func (d *Drawer) Position() (int, int) {
+	return d.position.Col, d.position.Row
+}
+
 func (d *Drawer) AddPosition(r rune) {
 	switch r {
 	case TAB:
-		d.Position.Col += 4
+		d.position.Col += 4
 	case NEW_LINE:
-		d.Position.Col = 1
-		d.Position.Row++
+		d.position.Col = 1
+		d.position.Row++
 	case SPACE:
-		d.Position.Col++
+		d.position.Col++
 	}
-	d.Position.Col += runewidth.RuneWidth(r)
+	d.position.Col += runewidth.RuneWidth(r)
 }
 
 func (d *Drawer) InitPosition() {
-	d.Position.Row, d.Position.Col = 0, 1
+	d.position.Row, d.position.Col = 0, 1
 }
 
 func (d *Drawer) Break() {
-	d.Position.Row++
-	d.Position.Col = 1
+	d.position.Row++
+	d.position.Col = 1
 }
