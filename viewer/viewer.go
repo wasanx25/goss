@@ -10,16 +10,16 @@ import (
 )
 
 type Viewer struct {
-	Tui    tcell.Screen
-	Drawer *drawer.Drawer
-	Color  tcell.Style
-	Event  *event.Event
+	tui    tcell.Screen
+	drawer *drawer.Drawer
+	color  tcell.Style
+	event  *event.Event
 }
 
 func New(text string) *Viewer {
 	manager := &Viewer{
-		Drawer: drawer.New(text, 0),
-		Event:  event.New(),
+		drawer: drawer.New(text, 0),
+		event:  event.New(),
 	}
 
 	return manager
@@ -38,63 +38,63 @@ func (v *Viewer) Init() error {
 		return err
 	}
 
-	v.Tui = tui
-	v.Color = tcell.StyleDefault.
+	v.tui = tui
+	v.color = tcell.StyleDefault.
 		Foreground(tcell.ColorBlueViolet).
 		Background(tcell.ColorBlack)
-	v.Tui.SetStyle(v.Color)
+	v.tui.SetStyle(v.color)
 	return nil
 }
 
 func (v *Viewer) Start() (err error) {
 	v.write()
 
-	v.Tui.Show()
-	_, height := v.Tui.Size()
-	v.Drawer.SetLimit(height)
+	v.tui.Show()
+	_, height := v.tui.Size()
+	v.drawer.SetLimit(height)
 
 	go func() {
 		for {
-			v.Event.Action(v.Tui)
+			v.event.Action(v.tui)
 		}
 	}()
 
 	go func() {
 		for {
 			select {
-			case t := <-v.Event.DrawCh:
-				v.Drawer.AddOffset(t)
+			case t := <-v.event.DrawCh:
+				v.drawer.AddOffset(t)
 				v.rewrite()
-			case <-v.Event.ResizeCh:
-				_, height = v.Tui.Size()
-				v.Drawer.SetLimit(height)
+			case <-v.event.ResizeCh:
+				_, height = v.tui.Size()
+				v.drawer.SetLimit(height)
 				v.rewrite()
 			}
 		}
 	}()
-	<-v.Event.DoneCh
+	<-v.event.DoneCh
 
-	v.Tui.Fini()
+	v.tui.Fini()
 	return
 }
 
 func (v *Viewer) rewrite() {
-	v.Tui.Clear()
+	v.tui.Clear()
 	v.write()
-	v.Tui.Show()
+	v.tui.Show()
 }
 
 func (v *Viewer) write() {
-	v.Drawer.InitPosition()
-	str, _ := v.Drawer.GetContent()
-	width, height := v.Tui.Size()
+	v.drawer.InitPosition()
+	str, _ := v.drawer.GetContent()
+	width, height := v.tui.Size()
 	for _, s := range str {
-		if v.Drawer.Position.Col >= width {
-			v.Drawer.Break()
+		if v.drawer.Position.Col >= width {
+			v.drawer.Break()
 		}
-		v.Tui.SetContent(v.Drawer.Position.Col, v.Drawer.Position.Row, s, nil, tcell.StyleDefault)
-		v.Drawer.AddPosition(s)
-		if height < v.Drawer.Position.Row {
+		v.tui.SetContent(v.drawer.Position.Col, v.drawer.Position.Row, s, nil, tcell.StyleDefault)
+		v.drawer.AddPosition(s)
+		if height < v.drawer.Position.Row {
 			break
 		}
 	}
