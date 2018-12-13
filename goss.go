@@ -11,7 +11,7 @@ func Run(text string) error {
 		return err
 	}
 
-	if err := v.Start(); err != nil {
+	if err := v.Run(); err != nil {
 		return err
 	}
 

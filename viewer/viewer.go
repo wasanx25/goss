@@ -46,7 +46,7 @@ func (v *Viewer) Init() error {
 	return nil
 }
 
-func (v *Viewer) Start() (err error) {
+func (v *Viewer) Run() (err error) {
 	v.write()
 
 	v.tui.Show()
