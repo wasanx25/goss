@@ -13,7 +13,7 @@ type Event struct {
 }
 
 const (
-	PageUp Type = iota
+	PageUp Type = iota + 1
 	PageDown
 	PageUpScreen
 	PageDownScreen
