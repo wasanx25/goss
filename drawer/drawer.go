@@ -2,6 +2,7 @@ package drawer
 
 import (
 	"bufio"
+	"strconv"
 	"strings"
 
 	runewidth "github.com/mattn/go-runewidth"
@@ -15,6 +16,7 @@ type Drawer struct {
 	max      int
 	posRow 	 int
 	posCol   int
+	rowMax 	 int
 }
 
 const (
@@ -24,10 +26,14 @@ const (
 )
 
 func New(text string, offset int, max int) *Drawer {
+	maxStr := strconv.Itoa(max)
+	rowMax := len(maxStr) + 4
+
 	return &Drawer{
 		text:   text,
 		offset: offset,
 		max:    max,
+		rowMax: rowMax,
 	}
 }
 
@@ -75,7 +81,7 @@ func (d *Drawer) pageDown() {
 }
 
 func (d *Drawer) pageUp() {
-	if d.offset > 1 {
+	if d.offset > 0 {
 		d.offset--
 	}
 }
@@ -151,7 +157,7 @@ func (d *Drawer) AddPosition(r rune) {
 	case TAB:
 		d.posCol += 4
 	case NEW_LINE:
-		d.posCol = 1
+		d.posCol = d.rowMax
 		d.posRow++
 	case SPACE:
 		d.posCol++
@@ -160,7 +166,7 @@ func (d *Drawer) AddPosition(r rune) {
 }
 
 func (d *Drawer) InitPosition() {
-	d.posRow, d.posCol = 0, 1
+	d.posRow, d.posCol = 0, d.rowMax
 }
 
 func (d *Drawer) Break() {

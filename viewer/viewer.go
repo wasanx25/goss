@@ -2,6 +2,7 @@ package viewer
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/gdamore/tcell"
@@ -89,6 +90,20 @@ func (v *Viewer) write() {
 	v.drawer.InitPosition()
 	str, _ := v.drawer.GetContent()
 	width, height := v.tui.Size()
+
+	offsetInt := v.drawer.Offset()
+	for i := 0; i < height; i++ {
+		offsetStr := strconv.Itoa(offsetInt)
+		for _, r := range offsetStr {
+			col, row := v.drawer.Position()
+			v.tui.SetContent(col, row, r, nil, tcell.StyleDefault)
+			v.drawer.AddPosition(r)
+		}
+		v.drawer.Break()
+		offsetInt++
+	}
+
+	v.drawer.InitPosition()
 	for _, s := range str {
 		col, row := v.drawer.Position()
 		if col >= width {
