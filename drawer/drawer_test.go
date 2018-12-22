@@ -22,7 +22,7 @@ func TestPageDown(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		d := drawer.New("test", tt.offset, tt.max)
+		d := drawer.New("test", tt.offset, tt.max, 1)
 		d.SetLimit(tt.limit)
 
 		drawer.PageDown(d)
@@ -34,7 +34,7 @@ func TestPageDown(t *testing.T) {
 
 // pageUp is private method. export_test.go is necessary to run below test
 func TestPageUp(t *testing.T) {
-	d := drawer.New("test", 10, 1)
+	d := drawer.New("test", 10, 1, 1)
 	drawer.PageUp(d)
 
 	if d.Offset() != 9 {
@@ -57,7 +57,7 @@ func TestPageDownHalf(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		d := drawer.New("test", tt.offset, tt.max)
+		d := drawer.New("test", tt.offset, tt.max, 1)
 		d.SetLimit(tt.limit)
 
 		drawer.PageDownHalf(d)
@@ -81,7 +81,7 @@ func TestPageUpHalf(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		d := drawer.New("test", tt.offset, tt.max)
+		d := drawer.New("test", tt.offset, tt.max, 1)
 		d.SetLimit(tt.limit)
 
 		drawer.PageUpHalf(d)
@@ -105,7 +105,7 @@ func TestPageDownWindow(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		d := drawer.New("test", tt.offset, tt.max)
+		d := drawer.New("test", tt.offset, tt.max, 1)
 		d.SetLimit(tt.limit)
 
 		drawer.PageDownWindow(d)
@@ -129,7 +129,7 @@ func TestPageUpWindow(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		d := drawer.New("test", tt.offset, tt.max)
+		d := drawer.New("test", tt.offset, tt.max, 1)
 		d.SetLimit(tt.limit)
 
 		drawer.PageUpWindow(d)
@@ -141,7 +141,7 @@ func TestPageUpWindow(t *testing.T) {
 
 // pageEnd is private method. export_test.go is necessary to run below test
 func TestPageEnd(t *testing.T) {
-	d := drawer.New("test\nlong\ntext\ntest", 10, 3)
+	d := drawer.New("test\nlong\ntext\ntest", 10, 3, 1)
 	d.SetLimit(2)
 	drawer.PageEnd(d)
 
@@ -152,7 +152,7 @@ func TestPageEnd(t *testing.T) {
 
 // pageTop is private method. export_test.go is necessary to run below test
 func TestPageTop(t *testing.T) {
-	d := drawer.New("test", 10, 0)
+	d := drawer.New("test", 10, 0, 1)
 	drawer.PageTop(d)
 
 	if d.Offset() != 0 {
@@ -175,7 +175,7 @@ func TestGetContent(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		d := drawer.New(tt.text, tt.offset, strings.Count(tt.text, "\n"))
+		d := drawer.New(tt.text, tt.offset, strings.Count(tt.text, "\n"), 1)
 		d.SetLimit(tt.limit)
 		result, err := d.GetContent()
 
@@ -201,7 +201,7 @@ func TestAddPosition(t *testing.T) {
 		{'か', 3, 0},
 	}
 
-	d := drawer.New("", 0, 0) // dummy args
+	d := drawer.New("", 0, 0, 1) // dummy args
 	d.InitPosition()
 	for _, tt := range tests {
 		d.AddPosition(tt.args)
@@ -221,7 +221,7 @@ func TestAddPosition(t *testing.T) {
 }
 
 func TestInitPosition(t *testing.T) {
-	d := drawer.New("", 0, 0) // dummy args
+	d := drawer.New("", 0, 0, 1) // dummy args
 	d.InitPosition()
 
 	col, row := d.Position()
@@ -236,7 +236,7 @@ func TestInitPosition(t *testing.T) {
 }
 
 func TestBreak(t *testing.T) {
-	d := drawer.New("", 0, 0) // dummy args
+	d := drawer.New("", 0, 0, 1) // dummy args
 	d.Break()
 
 	col, row := d.Position()

@@ -19,8 +19,12 @@ type Viewer struct {
 }
 
 func New(text string) *Viewer {
+	max := strings.Count(text, "\n")
+	maxStr := strconv.Itoa(max)
+	rowMax := len(maxStr) + 4
+
 	manager := &Viewer{
-		drawer: drawer.New(text, 0, strings.Count(text, "\n")),
+		drawer: drawer.New(text, 0, max, rowMax),
 		event:  event.New(),
 	}
 

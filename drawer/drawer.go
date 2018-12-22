@@ -2,7 +2,6 @@ package drawer
 
 import (
 	"bufio"
-	"strconv"
 	"strings"
 
 	runewidth "github.com/mattn/go-runewidth"
@@ -25,10 +24,7 @@ const (
 	SPACE    = ' '
 )
 
-func New(text string, offset int, max int) *Drawer {
-	maxStr := strconv.Itoa(max)
-	rowMax := len(maxStr) + 4
-
+func New(text string, offset int, max int, rowMax int) *Drawer {
 	return &Drawer{
 		text:   text,
 		offset: offset,
