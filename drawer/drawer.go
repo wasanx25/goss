@@ -161,7 +161,7 @@ func (d *Drawer) AddPosition(r rune) {
 	d.posCol += runewidth.RuneWidth(r)
 }
 
-func (d *Drawer) InitPosition() {
+func (d *Drawer) Reset() {
 	d.posRow, d.posCol = 0, d.rowMax
 }
 

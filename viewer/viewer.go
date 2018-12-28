@@ -91,7 +91,7 @@ func (v *Viewer) rewrite() {
 }
 
 func (v *Viewer) write() {
-	v.drawer.InitPosition()
+	v.drawer.Reset()
 	str, _ := v.drawer.GetContent()
 	width, height := v.tui.Size()
 
@@ -107,7 +107,7 @@ func (v *Viewer) write() {
 		offsetInt++
 	}
 
-	v.drawer.InitPosition()
+	v.drawer.Reset()
 	for _, s := range str {
 		col, row := v.drawer.Position()
 		if col >= width {

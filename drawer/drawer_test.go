@@ -202,7 +202,7 @@ func TestAddPosition(t *testing.T) {
 	}
 
 	d := drawer.New("", 0, 0, 1) // dummy args
-	d.InitPosition()
+	d.Reset()
 	for _, tt := range tests {
 		d.AddPosition(tt.args)
 
@@ -216,13 +216,13 @@ func TestAddPosition(t *testing.T) {
 			t.Errorf(string(tt.args)+" is expected=%d, got=%d", tt.expectRow, row)
 		}
 
-		d.InitPosition() // reset
+		d.Reset() // reset
 	}
 }
 
 func TestInitPosition(t *testing.T) {
 	d := drawer.New("", 0, 0, 1) // dummy args
-	d.InitPosition()
+	d.Reset()
 
 	col, row := d.Position()
 
