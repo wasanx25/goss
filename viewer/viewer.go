@@ -100,7 +100,7 @@ func (v *Viewer) write() {
 		offsetStr := strconv.Itoa(offsetInt)
 		for _, r := range offsetStr {
 			col, row := v.drawer.Position()
-			v.tui.SetContent(col, row, r, nil, tcell.StyleDefault)
+			v.tui.SetContent(col, row, r, nil, tcell.StyleDefault.Foreground(tcell.Color101))
 			v.drawer.AddPosition(r)
 		}
 		v.drawer.Break()
