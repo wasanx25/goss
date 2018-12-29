@@ -167,11 +167,11 @@ func TestGetContent(t *testing.T) {
 		limit    int
 		expected string
 	}{
-		{"test1", 1, 1, "test1"},
-		{"test1\ntest2\ntest3", 1, 1, "test1"},
-		{"test1\ntest2\ntest3", 2, 2, "test2\ntest3"},
-		{"test1\ntest2\ntest3", 1, 3, "test1\ntest2\ntest3"},
-		{"test1\ntest2\ntest3", 2, 3, "test2\ntest3"},
+		{"test1", 1, 1, ""},
+		{"test1\ntest2\ntest3", 1, 1, ""},
+		{"test1\ntest2\ntest3", 2, 2, "test3"},
+		{"test1\ntest2\ntest3", 1, 3, "test2\ntest3"},
+		{"test1\ntest2\ntest3", 2, 3, "test3"},
 	}
 
 	for _, tt := range tests {

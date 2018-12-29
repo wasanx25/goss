@@ -130,7 +130,7 @@ func (d *Drawer) GetContent() (string, error) {
 	)
 	for scan.Scan() {
 		i++
-		if i < d.offset {
+		if i <= d.offset {
 			continue
 		} else if i >= d.limit+d.offset {
 			break
