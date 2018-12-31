@@ -96,11 +96,11 @@ func (v *Viewer) write() {
 	width, height := v.tui.Size()
 
 	offsetInt := v.drawer.Offset()
-	for i := 1; i <= height; i++ {
+	for i := 1; i <= height+1; i++ {
 		offsetStr := strconv.Itoa(offsetInt)
 		for _, r := range offsetStr {
 			col, row := v.drawer.Position()
-			v.tui.SetContent(col, row - 1, r, nil, tcell.StyleDefault.Foreground(tcell.Color101))
+			v.tui.SetContent(col, row-1, r, nil, tcell.StyleDefault.Foreground(tcell.Color101))
 			v.drawer.AddPosition(r)
 		}
 		v.drawer.Break()

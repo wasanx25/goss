@@ -9,13 +9,13 @@ import (
 )
 
 type Drawer struct {
-	text     string
-	offset   int
-	limit    int
-	max      int
-	posRow 	 int
-	posCol   int
-	rowMax 	 int
+	text   string
+	offset int
+	limit  int
+	max    int
+	posRow int
+	posCol int
+	rowMax int
 }
 
 const (
@@ -132,7 +132,7 @@ func (d *Drawer) GetContent() (string, error) {
 		i++
 		if i <= d.offset {
 			continue
-		} else if i >= d.limit+d.offset {
+		} else if i >= d.limit+d.offset+1 {
 			break
 		}
 		lines = append(lines, scan.Text())
