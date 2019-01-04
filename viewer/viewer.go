@@ -44,7 +44,7 @@ func (v *Viewer) Init() error {
 		return err
 	}
 
-	v.tui = tui
+	v.setTui(tui)
 	v.color = tcell.StyleDefault.
 		Foreground(tcell.ColorBlueViolet).
 		Background(tcell.ColorBlack)
@@ -56,8 +56,7 @@ func (v *Viewer) Run() (err error) {
 	v.write()
 
 	v.tui.Show()
-	_, height := v.tui.Size()
-	v.drawer.SetLimit(height)
+	v.setLimit()
 
 	go func() {
 		for {
@@ -72,7 +71,7 @@ func (v *Viewer) Run() (err error) {
 				v.drawer.AddOffset(t)
 				v.rewrite()
 			case <-v.event.ResizeCh:
-				_, height = v.tui.Size()
+				_, height := v.tui.Size()
 				v.drawer.SetLimit(height)
 				v.rewrite()
 			}
@@ -82,6 +81,15 @@ func (v *Viewer) Run() (err error) {
 
 	v.tui.Fini()
 	return
+}
+
+func (v *Viewer) setTui(tui tcell.Screen) {
+	v.tui = tui
+}
+
+func (v *Viewer) setLimit() {
+	_, height := v.tui.Size()
+	v.drawer.SetLimit(height)
 }
 
 func (v *Viewer) rewrite() {
