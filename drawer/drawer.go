@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"strings"
 
-	runewidth "github.com/mattn/go-runewidth"
+	"github.com/mattn/go-runewidth"
 	"github.com/wasanx25/goss/event"
 )
 
