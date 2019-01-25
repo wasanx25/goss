@@ -168,7 +168,7 @@ func TestGetContent(t *testing.T) {
 		expected string
 	}{
 		{"test1", 1, 1, ""},
-		{"test1\ntest2\ntest3", 1, 1, ""},
+		{"test1\ntest2\ntest3", 1, 1, "test2"},
 		{"test1\ntest2\ntest3", 2, 2, "test3"},
 		{"test1\ntest2\ntest3", 1, 3, "test2\ntest3"},
 		{"test1\ntest2\ntest3", 2, 3, "test3"},
