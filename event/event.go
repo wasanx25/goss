@@ -21,6 +21,8 @@ const (
 	PageDownHalf
 	PageTop
 	PageEnd
+
+	Help
 )
 
 func New() *Event {
@@ -58,6 +60,8 @@ func (e *Event) Action(tui tcell.Screen) {
 			e.DrawCh <- PageTop
 		case 'G':
 			e.DrawCh <- PageEnd
+		case 'h':
+			e.DrawCh <- Help
 		}
 	case *tcell.EventResize:
 		e.ResizeCh <- struct{}{}
