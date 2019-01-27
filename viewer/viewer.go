@@ -108,7 +108,7 @@ func (v *Viewer) write() {
 		offsetStr := strconv.Itoa(offsetInt)
 		for _, r := range offsetStr {
 			col, row := v.drawer.Position()
-			v.tui.SetContent(col, row-1, r, nil, tcell.StyleDefault.Foreground(tcell.Color101))
+			v.tui.SetContent(col, row-1, r, nil, tcell.StyleDefault.Foreground(tcell.Color59))
 			v.drawer.AddPosition(r)
 		}
 		v.drawer.Break()
@@ -121,7 +121,7 @@ func (v *Viewer) write() {
 		if col >= width {
 			v.drawer.Break()
 		}
-		v.tui.SetContent(col, row, s, nil, tcell.StyleDefault)
+		v.tui.SetContent(col, row, s, nil, tcell.StyleDefault.Foreground(tcell.ColorGray).Background(tcell.ColorBlack))
 		v.drawer.AddPosition(s)
 		if height < row {
 			break
