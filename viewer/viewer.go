@@ -12,10 +12,12 @@ import (
 )
 
 type Viewer struct {
-	tui    tcell.Screen
-	drawer *drawer.Drawer
-	color  tcell.Style
-	event  *event.Event
+	tui          tcell.Screen
+	drawer       *drawer.Drawer
+	screenStyle  tcell.Style
+	lineNumStyle tcell.Style
+	contentStyle tcell.Style
+	event        *event.Event
 }
 
 func New(text string) *Viewer {
@@ -45,10 +47,15 @@ func (v *Viewer) Init() error {
 	}
 
 	v.setTui(tui)
-	v.color = tcell.StyleDefault.
+	v.screenStyle = tcell.StyleDefault.
 		Foreground(tcell.ColorBlueViolet).
 		Background(tcell.ColorBlack)
-	v.tui.SetStyle(v.color)
+	v.lineNumStyle = tcell.StyleDefault.Foreground(tcell.Color59)
+	v.contentStyle = tcell.StyleDefault.
+		Foreground(tcell.ColorGray).
+		Background(tcell.ColorBlack)
+
+	v.tui.SetStyle(v.screenStyle)
 	return nil
 }
 
@@ -108,7 +115,7 @@ func (v *Viewer) write() {
 		offsetStr := strconv.Itoa(offsetInt)
 		for _, r := range offsetStr {
 			col, row := v.drawer.Position()
-			v.tui.SetContent(col, row-1, r, nil, tcell.StyleDefault.Foreground(tcell.Color59))
+			v.tui.SetContent(col, row-1, r, nil, v.lineNumStyle)
 			v.drawer.AddPosition(r)
 		}
 		v.drawer.Break()
@@ -121,7 +128,7 @@ func (v *Viewer) write() {
 		if col >= width {
 			v.drawer.Break()
 		}
-		v.tui.SetContent(col, row, s, nil, tcell.StyleDefault.Foreground(tcell.ColorGray).Background(tcell.ColorBlack))
+		v.tui.SetContent(col, row, s, nil, v.contentStyle)
 		v.drawer.AddPosition(s)
 		if height < row {
 			break
