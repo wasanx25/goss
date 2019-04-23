@@ -110,17 +110,7 @@ func (v *Viewer) write() {
 	str, _ := v.drawer.GetContent()
 	width, height := v.tui.Size()
 
-	offsetInt := v.drawer.Offset()
-	for i := 1; i <= height+1; i++ {
-		offsetStr := strconv.Itoa(offsetInt)
-		for _, r := range offsetStr {
-			col, row := v.drawer.Position()
-			v.tui.SetContent(col, row-1, r, nil, v.lineNumStyle)
-			v.drawer.AddPosition(r)
-		}
-		v.drawer.Break()
-		offsetInt++
-	}
+	v.writeLineNumber(height)
 
 	v.drawer.Reset()
 	for _, s := range str {
@@ -133,5 +123,25 @@ func (v *Viewer) write() {
 		if height < row {
 			break
 		}
+	}
+}
+
+func (v *Viewer) writeLineNumber(height int) {
+	offsetInt := v.drawer.Offset()
+	max := v.drawer.Max()
+
+	for i := 1; i <= height+1; i++ {
+		if offsetInt > max+1 {
+			break
+		}
+
+		offsetStr := strconv.Itoa(offsetInt)
+		for _, r := range offsetStr {
+			col, row := v.drawer.Position()
+			v.tui.SetContent(col, row-1, r, nil, v.lineNumStyle)
+			v.drawer.AddPosition(r)
+		}
+		v.drawer.Break()
+		offsetInt++
 	}
 }

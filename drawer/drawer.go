@@ -33,6 +33,10 @@ func New(text string, offset int, max int, rowMax int) *Drawer {
 	}
 }
 
+func (d *Drawer) Max() int {
+	return d.max
+}
+
 func (d *Drawer) Offset() int {
 	return d.offset
 }
@@ -115,7 +119,9 @@ func (d *Drawer) pageUpWindow() {
 }
 
 func (d *Drawer) pageEnd() {
-	d.offset = d.max - d.limit
+	if d.max > d.limit {
+		d.offset = d.max - d.limit + 1
+	}
 }
 
 func (d *Drawer) pageTop() {
