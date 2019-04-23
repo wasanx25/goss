@@ -119,7 +119,9 @@ func (d *Drawer) pageUpWindow() {
 }
 
 func (d *Drawer) pageEnd() {
-	d.offset = d.max - d.limit
+	if d.max > d.limit {
+		d.offset = d.max - d.limit + 1
+	}
 }
 
 func (d *Drawer) pageTop() {

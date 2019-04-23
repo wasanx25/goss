@@ -145,7 +145,7 @@ func TestPageEnd(t *testing.T) {
 	d.SetLimit(2)
 	drawer.PageEnd(d)
 
-	if d.Offset() != (3 - 2) {
+	if d.Offset() != (3 - 1) {
 		t.Errorf("expected=1, got=%d", d.Offset())
 	}
 }
