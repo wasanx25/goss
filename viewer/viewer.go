@@ -23,14 +23,14 @@ type Viewer struct {
 func New(text string) *Viewer {
 	max := strings.Count(text, "\n")
 	maxStr := strconv.Itoa(max)
-	rowMax := len(maxStr) + 4
+	rowMax := len(maxStr) + 4 // line number default space
 
-	manager := &Viewer{
+	viewer := &Viewer{
 		drawer: drawer.New(text, 0, max, rowMax),
 		event:  event.New(),
 	}
 
-	return manager
+	return viewer
 }
 
 func (v *Viewer) Init() error {

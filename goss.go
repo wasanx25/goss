@@ -5,7 +5,6 @@ import (
 )
 
 func Run(text string) error {
-
 	v := viewer.New(text)
 	if err := v.Init(); err != nil {
 		return err
