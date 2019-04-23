@@ -1,9 +1,10 @@
 package viewer_test
 
 import (
+	"testing"
+
 	"github.com/gdamore/tcell"
 	"github.com/wasanx25/goss/viewer"
-	"testing"
 )
 
 func TestWrite(t *testing.T) {
@@ -27,8 +28,8 @@ func TestWrite(t *testing.T) {
 	expected := ` 1   test1                    
  2   test2  test3    test4    
  3   test5                    
- 4                            
- 5                            
+                              
+                              
 `
 
 	actual := getString(tui)

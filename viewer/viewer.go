@@ -128,8 +128,13 @@ func (v *Viewer) write() {
 
 func (v *Viewer) writeLineNumber(height int) {
 	offsetInt := v.drawer.Offset()
+	max := v.drawer.Max()
 
 	for i := 1; i <= height+1; i++ {
+		if offsetInt > max+1 {
+			break
+		}
+
 		offsetStr := strconv.Itoa(offsetInt)
 		for _, r := range offsetStr {
 			col, row := v.drawer.Position()
