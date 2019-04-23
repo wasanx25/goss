@@ -25,12 +25,15 @@ func TestWrite(t *testing.T) {
 
 	tui.Show()
 
-	expected := ` 1   test1                    
- 2   test2  test3    test4    
- 3   test5                    
-                              
-                              
-`
+	// trim end space if use heredoc
+	slice := []string{
+		" 1   test1                    \n",
+		" 2   test2  test3    test4    \n",
+		" 3   test5                    \n",
+		"                              \n",
+		"                              \n",
+	}
+	expected := slice[0] + slice[1] + slice[2] + slice[3] + slice[4]
 
 	actual := getString(tui)
 
