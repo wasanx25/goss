@@ -33,6 +33,10 @@ func New(text string, offset int, max int, rowMax int) *Drawer {
 	}
 }
 
+func (d *Drawer) Max() int {
+	return d.max
+}
+
 func (d *Drawer) Offset() int {
 	return d.offset
 }
