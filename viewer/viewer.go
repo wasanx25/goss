@@ -1,7 +1,6 @@
 package viewer
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 
@@ -20,12 +19,13 @@ type Viewer struct {
 	event        *event.Event
 }
 
-func New(text string) *Viewer {
+func New(text string, tui tcell.Screen) *Viewer {
 	max := strings.Count(text, "\n")
 	maxStr := strconv.Itoa(max)
 	rowMax := len(maxStr) + 4 // line number default space
 
 	viewer := &Viewer{
+		tui:    tui,
 		drawer: drawer.New(text, 0, max, rowMax),
 		event:  event.New(),
 	}
@@ -33,20 +33,7 @@ func New(text string) *Viewer {
 	return viewer
 }
 
-func (v *Viewer) Init() error {
-	tui, err := tcell.NewScreen()
-	if err != nil {
-		err = fmt.Errorf("tcell.NewScreen() error: %s", err)
-		return err
-	}
-
-	err = tui.Init()
-	if err != nil {
-		err = fmt.Errorf("tcell.tui.Init() error: %s", err)
-		return err
-	}
-
-	v.setTui(tui)
+func (v *Viewer) Init() {
 	v.screenStyle = tcell.StyleDefault.
 		Foreground(tcell.ColorBlueViolet).
 		Background(tcell.ColorBlack)
@@ -56,7 +43,6 @@ func (v *Viewer) Init() error {
 		Background(tcell.ColorBlack)
 
 	v.tui.SetStyle(v.screenStyle)
-	return nil
 }
 
 func (v *Viewer) Run() (err error) {

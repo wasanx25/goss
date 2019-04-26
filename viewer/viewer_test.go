@@ -8,14 +8,12 @@ import (
 )
 
 func TestWrite(t *testing.T) {
-	var err error
-
 	tui := tcell.NewSimulationScreen("")
-	v := viewer.New("test1\ntest2 test3\ttest4\ntest5")
-
-	if err = tui.Init(); err != nil {
+	if err := tui.Init(); err != nil {
 		t.Fatal(err)
 	}
+
+	v := viewer.New("test1\ntest2 test3\ttest4\ntest5", tui)
 
 	tui.SetSize(30, 5)
 
