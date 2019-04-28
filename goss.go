@@ -19,7 +19,6 @@ func Run(text string) error {
 	}
 
 	v := viewer.New(text, tui)
-	v.Init()
 
 	if err := v.Run(); err != nil {
 		return err

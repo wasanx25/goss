@@ -17,7 +17,6 @@ func TestWrite(t *testing.T) {
 
 	tui.SetSize(30, 5)
 
-	viewer.SetTui(v, tui)
 	viewer.SetLimit(v)
 	viewer.Write(v)
 

@@ -33,7 +33,7 @@ func New(text string, tui tcell.Screen) *Viewer {
 	return viewer
 }
 
-func (v *Viewer) Init() {
+func (v *Viewer) Run() (err error) {
 	v.screenStyle = tcell.StyleDefault.
 		Foreground(tcell.ColorBlueViolet).
 		Background(tcell.ColorBlack)
@@ -43,9 +43,7 @@ func (v *Viewer) Init() {
 		Background(tcell.ColorBlack)
 
 	v.tui.SetStyle(v.screenStyle)
-}
 
-func (v *Viewer) Run() (err error) {
 	v.write()
 
 	v.tui.Show()
@@ -74,10 +72,6 @@ func (v *Viewer) Run() (err error) {
 
 	v.tui.Fini()
 	return
-}
-
-func (v *Viewer) setTui(tui tcell.Screen) {
-	v.tui = tui
 }
 
 func (v *Viewer) setLimit() {
