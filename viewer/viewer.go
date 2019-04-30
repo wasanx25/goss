@@ -33,7 +33,7 @@ func New(text string, tui tcell.Screen) *Viewer {
 	return viewer
 }
 
-func (v *Viewer) Run() (err error) {
+func (v *Viewer) Open() (err error) {
 	v.screenStyle = tcell.StyleDefault.
 		Foreground(tcell.ColorBlueViolet).
 		Background(tcell.ColorBlack)

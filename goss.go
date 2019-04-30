@@ -20,7 +20,7 @@ func Run(text string) error {
 
 	v := viewer.New(text, tui)
 
-	if err := v.Run(); err != nil {
+	if err := v.Open(); err != nil {
 		return err
 	}
 
