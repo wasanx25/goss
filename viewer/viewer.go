@@ -44,7 +44,7 @@ func (v *Viewer) Run() (err error) {
 
 	v.tui.SetStyle(v.screenStyle)
 
-	v.write()
+	v.drawer.Write(v.tui, v.contentStyle, v.lineNumStyle)
 
 	v.tui.Show()
 	v.setLimit()
@@ -62,8 +62,7 @@ func (v *Viewer) Run() (err error) {
 				v.drawer.AddOffset(t)
 				v.rewrite()
 			case <-v.event.ResizeCh:
-				_, height := v.tui.Size()
-				v.drawer.SetLimit(height)
+				v.setLimit()
 				v.rewrite()
 			}
 		}
@@ -81,47 +80,6 @@ func (v *Viewer) setLimit() {
 
 func (v *Viewer) rewrite() {
 	v.tui.Clear()
-	v.write()
+	v.drawer.Write(v.tui, v.contentStyle, v.lineNumStyle)
 	v.tui.Show()
-}
-
-func (v *Viewer) write() {
-	v.drawer.Reset()
-	str, _ := v.drawer.GetContent()
-	width, height := v.tui.Size()
-
-	v.writeLineNumber(height)
-
-	v.drawer.Reset()
-	for _, s := range str {
-		col, row := v.drawer.Position()
-		if col >= width {
-			v.drawer.Break()
-		}
-		v.tui.SetContent(col, row, s, nil, v.contentStyle)
-		v.drawer.AddPosition(s)
-		if height < row {
-			break
-		}
-	}
-}
-
-func (v *Viewer) writeLineNumber(height int) {
-	offsetInt := v.drawer.Offset()
-	max := v.drawer.Max()
-
-	for i := 1; i <= height+1; i++ {
-		if offsetInt > max+1 {
-			break
-		}
-
-		offsetStr := strconv.Itoa(offsetInt)
-		for _, r := range offsetStr {
-			col, row := v.drawer.Position()
-			v.tui.SetContent(col, row-1, r, nil, v.lineNumStyle)
-			v.drawer.AddPosition(r)
-		}
-		v.drawer.Break()
-		offsetInt++
-	}
 }
