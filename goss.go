@@ -7,7 +7,27 @@ import (
 	"github.com/wasanx25/goss/viewer"
 )
 
-func Run(text string) error {
+type StyleOptions func(*viewer.Styles)
+
+func ScreenStyle(style tcell.Style) StyleOptions {
+	return func(s *viewer.Styles) {
+		s.SetScreenStyle(style)
+	}
+}
+
+func LineNumStyle(style tcell.Style) StyleOptions {
+	return func(s *viewer.Styles) {
+		s.SetLineNumStyle(style)
+	}
+}
+
+func ContentStyle(style tcell.Style) StyleOptions {
+	return func(s *viewer.Styles) {
+		s.SetContentStyle(style)
+	}
+}
+
+func Run(text string, styleOptions ...StyleOptions) error {
 	tui, err := tcell.NewScreen()
 
 	if err != nil {
@@ -18,7 +38,17 @@ func Run(text string) error {
 		return fmt.Errorf("tcell.tui.Init() error: %s", err)
 	}
 
-	v := viewer.New(text, tui)
+	styles := &viewer.Styles{}
+	// Default style
+	styles.SetScreenStyle(tcell.StyleDefault.Foreground(tcell.ColorBlueViolet))
+	styles.SetLineNumStyle(tcell.StyleDefault.Foreground(tcell.Color59))
+	styles.SetContentStyle(tcell.StyleDefault.Foreground(tcell.ColorGray).Background(tcell.ColorBlack))
+
+	for _, option := range styleOptions {
+		option(styles)
+	}
+
+	v := viewer.New(text, tui, styles)
 
 	if err := v.Open(); err != nil {
 		return err

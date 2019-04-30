@@ -11,15 +11,23 @@ import (
 )
 
 type Viewer struct {
-	tui          tcell.Screen
-	drawer       *drawer.Drawer
+	tui    tcell.Screen
+	drawer *drawer.Drawer
+	event  *event.Event
+	styles *Styles
+}
+
+type Styles struct {
 	screenStyle  tcell.Style
 	lineNumStyle tcell.Style
 	contentStyle tcell.Style
-	event        *event.Event
 }
 
-func New(text string, tui tcell.Screen) *Viewer {
+func (s *Styles) SetScreenStyle(style tcell.Style)  { s.screenStyle = style }
+func (s *Styles) SetLineNumStyle(style tcell.Style) { s.lineNumStyle = style }
+func (s *Styles) SetContentStyle(style tcell.Style) { s.contentStyle = style }
+
+func New(text string, tui tcell.Screen, styles *Styles) *Viewer {
 	max := strings.Count(text, "\n")
 	maxStr := strconv.Itoa(max)
 	rowMax := len(maxStr) + 4 // line number default space
@@ -28,23 +36,16 @@ func New(text string, tui tcell.Screen) *Viewer {
 		tui:    tui,
 		drawer: drawer.New(text, 0, max, rowMax),
 		event:  event.New(),
+		styles: styles,
 	}
 
 	return viewer
 }
 
 func (v *Viewer) Open() (err error) {
-	v.screenStyle = tcell.StyleDefault.
-		Foreground(tcell.ColorBlueViolet).
-		Background(tcell.ColorBlack)
-	v.lineNumStyle = tcell.StyleDefault.Foreground(tcell.Color59)
-	v.contentStyle = tcell.StyleDefault.
-		Foreground(tcell.ColorGray).
-		Background(tcell.ColorBlack)
+	v.tui.SetStyle(v.styles.screenStyle)
 
-	v.tui.SetStyle(v.screenStyle)
-
-	v.drawer.Write(v.tui, v.contentStyle, v.lineNumStyle)
+	v.drawer.Write(v.tui, v.styles.contentStyle, v.styles.lineNumStyle)
 
 	v.tui.Show()
 	v.setLimit()
@@ -80,6 +81,6 @@ func (v *Viewer) setLimit() {
 
 func (v *Viewer) rewrite() {
 	v.tui.Clear()
-	v.drawer.Write(v.tui, v.contentStyle, v.lineNumStyle)
+	v.drawer.Write(v.tui, v.styles.contentStyle, v.styles.lineNumStyle)
 	v.tui.Show()
 }
