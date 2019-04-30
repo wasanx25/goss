@@ -40,9 +40,9 @@ func Run(text string, styleOptions ...StyleOptions) error {
 
 	styles := &viewer.Styles{}
 	// Default style
-	styles.SetScreenStyle(tcell.StyleDefault.Foreground(tcell.ColorBlueViolet))
-	styles.SetLineNumStyle(tcell.StyleDefault.Foreground(tcell.Color59))
-	styles.SetContentStyle(tcell.StyleDefault.Foreground(tcell.ColorGray).Background(tcell.ColorBlack))
+	styles.SetScreenStyle(tcell.StyleDefault.Background(tcell.Color233))
+	styles.SetLineNumStyle(tcell.StyleDefault.Foreground(tcell.Color59).Background(tcell.Color233))
+	styles.SetContentStyle(tcell.StyleDefault.Foreground(tcell.ColorGray).Background(tcell.Color233))
 
 	for _, option := range styleOptions {
 		option(styles)
