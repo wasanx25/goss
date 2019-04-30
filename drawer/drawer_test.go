@@ -5,158 +5,47 @@ import (
 	"testing"
 
 	"github.com/wasanx25/goss/drawer"
+	"github.com/wasanx25/goss/event"
 )
 
-// pageDown is private method. export_test.go is necessary to run below test
-func TestPageDown(t *testing.T) {
+func TestAddOffset(t *testing.T) {
 	tests := []struct {
-		max      int
-		offset   int
-		limit    int
-		expected int
+		eventType event.Type
+		offset    int
+		max       int
+		limit     int
+		expected  int
 	}{
-		{10, 1, 1, 1 + 1},
-		{10, 8, 1, 8 + 1},
-		{10, 12, 1, 12},
-		{10, 1, 11, 1},
+		{event.PageDown, 1, 10, 1, 1 + 1},
+		{event.PageDown, 8, 10, 1, 8 + 1},
+		{event.PageDown, 12, 10, 1, 12},
+		{event.PageDown, 1, 10, 11, 1},
+		{event.PageUp, 10, 1, 1, 9},
+		{event.PageDownHalf, 1, 10, 6, 1 + 3},
+		{event.PageDownHalf, 7, 10, 2, 7 + 1},
+		{event.PageDownHalf, 12, 10, 1, 12},
+		{event.PageDownHalf, 1, 10, 11, 1},
+		{event.PageUpHalf, 1, 10, 6, 1},
+		{event.PageUpHalf, 7, 10, 2, 7 - 1},
+		{event.PageUpHalf, 3, 10, 8, 1},
+		{event.PageDownScreen, 1, 10, 3, 4},
+		{event.PageDownScreen, 3, 10, 6, 4},
+		{event.PageDownScreen, 5, 10, 5, 5},
+		{event.PageUpScreen, 1, 10, 6, 1},
+		{event.PageUpScreen, 7, 10, 2, 7 - 2},
+		{event.PageUpScreen, 3, 10, 8, 1},
+		{event.PageEnd, 10, 3, 2, 3 - 1},
+		{event.PageTop, 10, 0, 0, 0},
 	}
 
 	for _, tt := range tests {
 		d := drawer.New("test", tt.offset, tt.max, 1)
 		d.SetLimit(tt.limit)
 
-		drawer.PageDown(d)
+		d.AddOffset(tt.eventType)
 		if d.Offset() != tt.expected {
-			t.Errorf("expected=%d, got=%d", tt.expected, d.Offset())
+			t.Errorf("eventType=%v, expected=%d, got=%d", tt.eventType, tt.expected, d.Offset())
 		}
-	}
-}
-
-// pageUp is private method. export_test.go is necessary to run below test
-func TestPageUp(t *testing.T) {
-	d := drawer.New("test", 10, 1, 1)
-	drawer.PageUp(d)
-
-	if d.Offset() != 9 {
-		t.Errorf("expected=0, got=%d", d.Offset())
-	}
-}
-
-// pageDownHalf is private method. export_test.go is necessary to run below test
-func TestPageDownHalf(t *testing.T) {
-	tests := []struct {
-		max      int
-		offset   int
-		limit    int
-		expected int
-	}{
-		{10, 1, 6, 1 + 3},
-		{10, 7, 2, 7 + 1},
-		{10, 12, 1, 12},
-		{10, 1, 11, 1},
-	}
-
-	for _, tt := range tests {
-		d := drawer.New("test", tt.offset, tt.max, 1)
-		d.SetLimit(tt.limit)
-
-		drawer.PageDownHalf(d)
-		if d.Offset() != tt.expected {
-			t.Errorf("expected=%d, got=%d", tt.expected, d.Offset())
-		}
-	}
-}
-
-// pageUpHalf is private method. export_test.go is necessary to run below test
-func TestPageUpHalf(t *testing.T) {
-	tests := []struct {
-		max      int
-		offset   int
-		limit    int
-		expected int
-	}{
-		{10, 1, 6, 1},
-		{10, 7, 2, 7 - 1},
-		{10, 3, 8, 1},
-	}
-
-	for _, tt := range tests {
-		d := drawer.New("test", tt.offset, tt.max, 1)
-		d.SetLimit(tt.limit)
-
-		drawer.PageUpHalf(d)
-		if d.Offset() != tt.expected {
-			t.Errorf("expected=%d, got=%d", tt.expected, d.Offset())
-		}
-	}
-}
-
-// pageDownWindow is private method. export_test.go is necessary to run below test
-func TestPageDownWindow(t *testing.T) {
-	tests := []struct {
-		max      int
-		offset   int
-		limit    int
-		expected int
-	}{
-		{10, 1, 3, 4},
-		{10, 3, 6, 4},
-		{10, 5, 5, 5},
-	}
-
-	for _, tt := range tests {
-		d := drawer.New("test", tt.offset, tt.max, 1)
-		d.SetLimit(tt.limit)
-
-		drawer.PageDownWindow(d)
-		if d.Offset() != tt.expected {
-			t.Errorf("expected=%d, got=%d", tt.expected, d.Offset())
-		}
-	}
-}
-
-// pageUpWindow is private method. export_test.go is necessary to run below test
-func TestPageUpWindow(t *testing.T) {
-	tests := []struct {
-		max      int
-		offset   int
-		limit    int
-		expected int
-	}{
-		{10, 1, 6, 1},
-		{10, 7, 2, 7 - 2},
-		{10, 3, 8, 1},
-	}
-
-	for _, tt := range tests {
-		d := drawer.New("test", tt.offset, tt.max, 1)
-		d.SetLimit(tt.limit)
-
-		drawer.PageUpWindow(d)
-		if d.Offset() != tt.expected {
-			t.Errorf("expected=%d, got=%d", tt.expected, d.Offset())
-		}
-	}
-}
-
-// pageEnd is private method. export_test.go is necessary to run below test
-func TestPageEnd(t *testing.T) {
-	d := drawer.New("test\nlong\ntext\ntest", 10, 3, 1)
-	d.SetLimit(2)
-	drawer.PageEnd(d)
-
-	if d.Offset() != (3 - 1) {
-		t.Errorf("expected=1, got=%d", d.Offset())
-	}
-}
-
-// pageTop is private method. export_test.go is necessary to run below test
-func TestPageTop(t *testing.T) {
-	d := drawer.New("test", 10, 0, 1)
-	drawer.PageTop(d)
-
-	if d.Offset() != 0 {
-		t.Errorf("expected=0, got=%d", d.Offset())
 	}
 }
 
