@@ -2,9 +2,12 @@ package drawer
 
 import (
 	"bufio"
+	"strconv"
 	"strings"
 
+	"github.com/gdamore/tcell"
 	"github.com/mattn/go-runewidth"
+
 	"github.com/wasanx25/goss/event"
 )
 
@@ -167,11 +170,53 @@ func (d *Drawer) AddPosition(r rune) {
 	d.posCol += runewidth.RuneWidth(r)
 }
 
-func (d *Drawer) Reset() {
+func (d *Drawer) PositionReset() {
 	d.posRow, d.posCol = 0, d.rowMax
 }
 
 func (d *Drawer) Break() {
 	d.posRow++
 	d.posCol = 1
+}
+
+func (d *Drawer) Write(tui tcell.Screen, contentStyle, lineNumStyle tcell.Style) {
+	d.PositionReset()
+	str, _ := d.GetContent()
+	width, height := tui.Size()
+
+	d.writeLineNumber(tui, height, lineNumStyle)
+
+	d.PositionReset()
+
+	for _, s := range str {
+		col, row := d.Position()
+		if col >= width {
+			d.Break()
+		}
+		tui.SetContent(col, row, s, nil, contentStyle)
+		d.AddPosition(s)
+		if height < row {
+			break
+		}
+	}
+}
+
+func (d *Drawer) writeLineNumber(tui tcell.Screen, height int, lineNumStyle tcell.Style) {
+	offsetInt := d.Offset()
+	max := d.Max()
+
+	for i := 1; i <= height+1; i++ {
+		if offsetInt > max+1 {
+			break
+		}
+
+		offsetStr := strconv.Itoa(offsetInt)
+		for _, r := range offsetStr {
+			col, row := d.Position()
+			tui.SetContent(col, row-1, r, nil, lineNumStyle)
+			d.AddPosition(r)
+		}
+		d.Break()
+		offsetInt++
+	}
 }

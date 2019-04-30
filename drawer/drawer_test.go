@@ -4,159 +4,49 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/gdamore/tcell"
 	"github.com/wasanx25/goss/drawer"
+	"github.com/wasanx25/goss/event"
 )
 
-// pageDown is private method. export_test.go is necessary to run below test
-func TestPageDown(t *testing.T) {
+func TestAddOffset(t *testing.T) {
 	tests := []struct {
-		max      int
-		offset   int
-		limit    int
-		expected int
+		eventType event.Type
+		offset    int
+		max       int
+		limit     int
+		expected  int
 	}{
-		{10, 1, 1, 1 + 1},
-		{10, 8, 1, 8 + 1},
-		{10, 12, 1, 12},
-		{10, 1, 11, 1},
+		{event.PageDown, 1, 10, 1, 1 + 1},
+		{event.PageDown, 8, 10, 1, 8 + 1},
+		{event.PageDown, 12, 10, 1, 12},
+		{event.PageDown, 1, 10, 11, 1},
+		{event.PageUp, 10, 1, 1, 9},
+		{event.PageDownHalf, 1, 10, 6, 1 + 3},
+		{event.PageDownHalf, 7, 10, 2, 7 + 1},
+		{event.PageDownHalf, 12, 10, 1, 12},
+		{event.PageDownHalf, 1, 10, 11, 1},
+		{event.PageUpHalf, 1, 10, 6, 1},
+		{event.PageUpHalf, 7, 10, 2, 7 - 1},
+		{event.PageUpHalf, 3, 10, 8, 1},
+		{event.PageDownScreen, 1, 10, 3, 4},
+		{event.PageDownScreen, 3, 10, 6, 4},
+		{event.PageDownScreen, 5, 10, 5, 5},
+		{event.PageUpScreen, 1, 10, 6, 1},
+		{event.PageUpScreen, 7, 10, 2, 7 - 2},
+		{event.PageUpScreen, 3, 10, 8, 1},
+		{event.PageEnd, 10, 3, 2, 3 - 1},
+		{event.PageTop, 10, 0, 0, 0},
 	}
 
 	for _, tt := range tests {
 		d := drawer.New("test", tt.offset, tt.max, 1)
 		d.SetLimit(tt.limit)
 
-		drawer.PageDown(d)
+		d.AddOffset(tt.eventType)
 		if d.Offset() != tt.expected {
-			t.Errorf("expected=%d, got=%d", tt.expected, d.Offset())
+			t.Errorf("eventType=%v, expected=%d, got=%d", tt.eventType, tt.expected, d.Offset())
 		}
-	}
-}
-
-// pageUp is private method. export_test.go is necessary to run below test
-func TestPageUp(t *testing.T) {
-	d := drawer.New("test", 10, 1, 1)
-	drawer.PageUp(d)
-
-	if d.Offset() != 9 {
-		t.Errorf("expected=0, got=%d", d.Offset())
-	}
-}
-
-// pageDownHalf is private method. export_test.go is necessary to run below test
-func TestPageDownHalf(t *testing.T) {
-	tests := []struct {
-		max      int
-		offset   int
-		limit    int
-		expected int
-	}{
-		{10, 1, 6, 1 + 3},
-		{10, 7, 2, 7 + 1},
-		{10, 12, 1, 12},
-		{10, 1, 11, 1},
-	}
-
-	for _, tt := range tests {
-		d := drawer.New("test", tt.offset, tt.max, 1)
-		d.SetLimit(tt.limit)
-
-		drawer.PageDownHalf(d)
-		if d.Offset() != tt.expected {
-			t.Errorf("expected=%d, got=%d", tt.expected, d.Offset())
-		}
-	}
-}
-
-// pageUpHalf is private method. export_test.go is necessary to run below test
-func TestPageUpHalf(t *testing.T) {
-	tests := []struct {
-		max      int
-		offset   int
-		limit    int
-		expected int
-	}{
-		{10, 1, 6, 1},
-		{10, 7, 2, 7 - 1},
-		{10, 3, 8, 1},
-	}
-
-	for _, tt := range tests {
-		d := drawer.New("test", tt.offset, tt.max, 1)
-		d.SetLimit(tt.limit)
-
-		drawer.PageUpHalf(d)
-		if d.Offset() != tt.expected {
-			t.Errorf("expected=%d, got=%d", tt.expected, d.Offset())
-		}
-	}
-}
-
-// pageDownWindow is private method. export_test.go is necessary to run below test
-func TestPageDownWindow(t *testing.T) {
-	tests := []struct {
-		max      int
-		offset   int
-		limit    int
-		expected int
-	}{
-		{10, 1, 3, 4},
-		{10, 3, 6, 4},
-		{10, 5, 5, 5},
-	}
-
-	for _, tt := range tests {
-		d := drawer.New("test", tt.offset, tt.max, 1)
-		d.SetLimit(tt.limit)
-
-		drawer.PageDownWindow(d)
-		if d.Offset() != tt.expected {
-			t.Errorf("expected=%d, got=%d", tt.expected, d.Offset())
-		}
-	}
-}
-
-// pageUpWindow is private method. export_test.go is necessary to run below test
-func TestPageUpWindow(t *testing.T) {
-	tests := []struct {
-		max      int
-		offset   int
-		limit    int
-		expected int
-	}{
-		{10, 1, 6, 1},
-		{10, 7, 2, 7 - 2},
-		{10, 3, 8, 1},
-	}
-
-	for _, tt := range tests {
-		d := drawer.New("test", tt.offset, tt.max, 1)
-		d.SetLimit(tt.limit)
-
-		drawer.PageUpWindow(d)
-		if d.Offset() != tt.expected {
-			t.Errorf("expected=%d, got=%d", tt.expected, d.Offset())
-		}
-	}
-}
-
-// pageEnd is private method. export_test.go is necessary to run below test
-func TestPageEnd(t *testing.T) {
-	d := drawer.New("test\nlong\ntext\ntest", 10, 3, 1)
-	d.SetLimit(2)
-	drawer.PageEnd(d)
-
-	if d.Offset() != (3 - 1) {
-		t.Errorf("expected=1, got=%d", d.Offset())
-	}
-}
-
-// pageTop is private method. export_test.go is necessary to run below test
-func TestPageTop(t *testing.T) {
-	d := drawer.New("test", 10, 0, 1)
-	drawer.PageTop(d)
-
-	if d.Offset() != 0 {
-		t.Errorf("expected=0, got=%d", d.Offset())
 	}
 }
 
@@ -202,7 +92,7 @@ func TestAddPosition(t *testing.T) {
 	}
 
 	d := drawer.New("", 0, 0, 1) // dummy args
-	d.Reset()
+	d.PositionReset()
 	for _, tt := range tests {
 		d.AddPosition(tt.args)
 
@@ -216,13 +106,13 @@ func TestAddPosition(t *testing.T) {
 			t.Errorf(string(tt.args)+" is expected=%d, got=%d", tt.expectRow, row)
 		}
 
-		d.Reset() // reset
+		d.PositionReset() // reset
 	}
 }
 
 func TestInitPosition(t *testing.T) {
 	d := drawer.New("", 0, 0, 1) // dummy args
-	d.Reset()
+	d.PositionReset()
 
 	col, row := d.Position()
 
@@ -248,4 +138,51 @@ func TestBreak(t *testing.T) {
 	if row != 1 {
 		t.Errorf("expected=%d, got=%d", 1, row)
 	}
+}
+
+func TestWrite(t *testing.T) {
+	tui := tcell.NewSimulationScreen("")
+	if err := tui.Init(); err != nil {
+		t.Fatal(err)
+	}
+
+	d := drawer.New("test1\ntest2 test3\ttest4\ntest5", 0, 2, 5)
+	d.SetLimit(5)
+
+	tui.SetSize(30, 5)
+
+	d.Write(tui, tcell.StyleDefault, tcell.StyleDefault)
+
+	tui.Show()
+
+	// trim end space if use heredoc
+	slice := []string{
+		" 1   test1                    \n",
+		" 2   test2  test3    test4    \n",
+		" 3   test5                    \n",
+		"                              \n",
+		"                              \n",
+	}
+	expected := slice[0] + slice[1] + slice[2] + slice[3] + slice[4]
+
+	actual := getString(tui)
+
+	if actual != expected {
+		t.Errorf("expected=%v, got=%v", expected, actual)
+	}
+}
+
+func getString(tui tcell.SimulationScreen) string {
+	width, _ := tui.Size()
+	cells, _, _ := tui.GetContents()
+
+	var runes []rune
+	for i, c := range cells {
+		runes = append(runes, c.Runes...)
+		if (i+1)%width == 0 {
+			runes = append(runes, '\n')
+		}
+	}
+
+	return string(runes)
 }
