@@ -14,16 +14,14 @@ type DDrawer interface {
 
 type contentDrawer struct {
 	text        string
-	maxLine     int
 	offset      int
 	limitHeight int
 	position    Positioner
 }
 
-func NewContentDrawer(text string, maxLine, offset, limitHeight int, positioner Positioner) DDrawer {
+func NewContentDrawer(text string, offset, limitHeight int, positioner Positioner) DDrawer {
 	return &contentDrawer{
 		text:        text,
-		maxLine:     maxLine,
 		offset:      offset,
 		limitHeight: limitHeight,
 		position:    positioner,

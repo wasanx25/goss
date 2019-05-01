@@ -15,7 +15,7 @@ func TestContentDrawerWrite(t *testing.T) {
 	}
 
 	position := drawer.NewPositioner(1)
-	c := drawer.NewContentDrawer("test1\ntest2 test3\ttest4\ntest5", 2, 0, 5, position)
+	c := drawer.NewContentDrawer("test1\ntest2 test3\ttest4\ntest5", 0, 5, position)
 
 	tui.SetSize(30, 5)
 	c.Write(tui, tcell.StyleDefault)
