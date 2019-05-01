@@ -8,13 +8,16 @@ import (
 
 	"github.com/wasanx25/goss/drawer"
 	"github.com/wasanx25/goss/event"
+	"github.com/wasanx25/goss/offsetter"
 )
 
 type Viewer struct {
-	tui    tcell.Screen
-	drawer *drawer.Drawer
-	event  *event.Event
-	styles *Styles
+	tui              tcell.Screen
+	contentDrawer    drawer.Drawer
+	lineNumberDrawer drawer.Drawer
+	offsetter        offsetter.Offsetter
+	event            *event.Event
+	styles           *Styles
 }
 
 type Styles struct {
@@ -28,15 +31,25 @@ func (s *Styles) SetLineNumStyle(style tcell.Style) { s.lineNumStyle = style }
 func (s *Styles) SetContentStyle(style tcell.Style) { s.contentStyle = style }
 
 func New(text string, tui tcell.Screen, styles *Styles) *Viewer {
-	max := strings.Count(text, "\n")
-	maxStr := strconv.Itoa(max)
-	rowMax := len(maxStr) + 4 // line number default space
+	maxLine := strings.Count(text, "\n")
+	maxStr := strconv.Itoa(maxLine)
+	rowNumMax := len(maxStr) + 4 // line number default space
+	defaultOffset := 0
+	_, limitHeight := tui.Size()
+
+	p1 := drawer.NewPositioner(rowNumMax)
+	p2 := drawer.NewPositioner(rowNumMax)
+	c := drawer.NewContentDrawer(text, defaultOffset, limitHeight, p1)
+	l := drawer.NewLineNumberDrawer(maxLine, defaultOffset, p2)
+	o := offsetter.NewOffsetter(defaultOffset, maxLine, limitHeight)
 
 	viewer := &Viewer{
-		tui:    tui,
-		drawer: drawer.New(text, 0, max, rowMax),
-		event:  event.New(),
-		styles: styles,
+		tui:              tui,
+		event:            event.New(),
+		contentDrawer:    c,
+		lineNumberDrawer: l,
+		offsetter:        o,
+		styles:           styles,
 	}
 
 	return viewer
@@ -45,7 +58,8 @@ func New(text string, tui tcell.Screen, styles *Styles) *Viewer {
 func (v *Viewer) Open() (err error) {
 	v.tui.SetStyle(v.styles.screenStyle)
 
-	v.drawer.Write(v.tui, v.styles.contentStyle, v.styles.lineNumStyle)
+	v.contentDrawer.Write(v.tui, v.styles.contentStyle)
+	v.lineNumberDrawer.Write(v.tui, v.styles.lineNumStyle)
 
 	v.tui.Show()
 	v.setLimit()
@@ -60,7 +74,9 @@ func (v *Viewer) Open() (err error) {
 		for {
 			select {
 			case t := <-v.event.DrawCh:
-				v.drawer.AddOffset(t)
+				offset := v.offsetter.UpdateAndGet(t)
+				v.lineNumberDrawer.SetOffset(offset)
+				v.contentDrawer.SetOffset(offset)
 				v.rewrite()
 			case <-v.event.ResizeCh:
 				v.setLimit()
@@ -75,12 +91,13 @@ func (v *Viewer) Open() (err error) {
 }
 
 func (v *Viewer) setLimit() {
-	_, height := v.tui.Size()
-	v.drawer.SetLimit(height)
+	_, limitHeight := v.tui.Size()
+	v.contentDrawer.SetLimitHeight(limitHeight)
 }
 
 func (v *Viewer) rewrite() {
 	v.tui.Clear()
-	v.drawer.Write(v.tui, v.styles.contentStyle, v.styles.lineNumStyle)
+	v.lineNumberDrawer.Write(v.tui, v.styles.lineNumStyle)
+	v.contentDrawer.Write(v.tui, v.styles.contentStyle)
 	v.tui.Show()
 }

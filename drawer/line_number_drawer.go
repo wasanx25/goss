@@ -12,7 +12,7 @@ type lineNumberDrawer struct {
 	position Positioner
 }
 
-func NewLineNumberDrawer(maxLine, offset int, positioner Positioner) DDrawer {
+func NewLineNumberDrawer(maxLine, offset int, positioner Positioner) Drawer {
 	return &lineNumberDrawer{
 		maxLine:  maxLine,
 		offset:   offset,
@@ -23,6 +23,8 @@ func NewLineNumberDrawer(maxLine, offset int, positioner Positioner) DDrawer {
 func (l *lineNumberDrawer) SetOffset(offset int) {
 	l.offset = offset
 }
+
+func (l *lineNumberDrawer) SetLimitHeight(limitHeight int) {}
 
 func (l *lineNumberDrawer) Write(tui tcell.Screen, style tcell.Style) error {
 	offsetInt := l.offset
@@ -44,6 +46,7 @@ func (l *lineNumberDrawer) Write(tui tcell.Screen, style tcell.Style) error {
 		l.position.Break()
 		offsetInt++
 	}
+	l.position.Reset()
 
 	return nil
 }

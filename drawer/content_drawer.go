@@ -7,12 +7,6 @@ import (
 	"github.com/gdamore/tcell"
 )
 
-// TODO already use Drawer... (struct)
-type DDrawer interface {
-	SetOffset(offset int)
-	Write(tui tcell.Screen, style tcell.Style) error
-}
-
 type contentDrawer struct {
 	text        string
 	offset      int
@@ -20,7 +14,7 @@ type contentDrawer struct {
 	position    Positioner
 }
 
-func NewContentDrawer(text string, offset, limitHeight int, positioner Positioner) DDrawer {
+func NewContentDrawer(text string, offset, limitHeight int, positioner Positioner) Drawer {
 	return &contentDrawer{
 		text:        text,
 		offset:      offset,
