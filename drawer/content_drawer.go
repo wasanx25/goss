@@ -9,7 +9,6 @@ import (
 
 // TODO already use Drawer... (struct)
 type DDrawer interface {
-	SetLimitHeight(limitHeight int)
 	Write(tui tcell.Screen, style tcell.Style) error
 }
 
