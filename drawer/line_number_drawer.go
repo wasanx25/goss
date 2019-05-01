@@ -20,6 +20,10 @@ func NewLineNumberDrawer(maxLine, offset int, positioner Positioner) DDrawer {
 	}
 }
 
+func (l *lineNumberDrawer) SetOffset(offset int) {
+	l.offset = offset
+}
+
 func (l *lineNumberDrawer) Write(tui tcell.Screen, style tcell.Style) error {
 	offsetInt := l.offset
 	max := l.maxLine

@@ -9,6 +9,7 @@ import (
 
 // TODO already use Drawer... (struct)
 type DDrawer interface {
+	SetOffset(offset int)
 	Write(tui tcell.Screen, style tcell.Style) error
 }
 
@@ -26,6 +27,10 @@ func NewContentDrawer(text string, offset, limitHeight int, positioner Positione
 		limitHeight: limitHeight,
 		position:    positioner,
 	}
+}
+
+func (c *contentDrawer) SetOffset(offset int) {
+	c.offset = offset
 }
 
 func (c *contentDrawer) SetLimitHeight(limitHeight int) {
