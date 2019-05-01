@@ -58,8 +58,13 @@ func New(text string, tui tcell.Screen, styles *Styles) *Viewer {
 func (v *Viewer) Open() (err error) {
 	v.tui.SetStyle(v.styles.screenStyle)
 
-	v.contentDrawer.Write(v.tui, v.styles.contentStyle)
-	v.lineNumberDrawer.Write(v.tui, v.styles.lineNumStyle)
+	if err = v.contentDrawer.Write(v.tui, v.styles.contentStyle); err != nil {
+		return
+	}
+
+	if err = v.lineNumberDrawer.Write(v.tui, v.styles.lineNumStyle); err != nil {
+		return
+	}
 
 	v.tui.Show()
 	v.setLimit()
@@ -77,10 +82,14 @@ func (v *Viewer) Open() (err error) {
 				offset := v.offsetter.UpdateAndGet(t)
 				v.lineNumberDrawer.SetOffset(offset)
 				v.contentDrawer.SetOffset(offset)
-				v.rewrite()
+				if err = v.rewrite(); err != nil {
+					close(v.event.DoneCh)
+				}
 			case <-v.event.ResizeCh:
 				v.setLimit()
-				v.rewrite()
+				if err = v.rewrite(); err != nil {
+					close(v.event.DoneCh)
+				}
 			}
 		}
 	}()
@@ -95,9 +104,17 @@ func (v *Viewer) setLimit() {
 	v.contentDrawer.SetLimitHeight(limitHeight)
 }
 
-func (v *Viewer) rewrite() {
+func (v *Viewer) rewrite() (err error) {
 	v.tui.Clear()
-	v.lineNumberDrawer.Write(v.tui, v.styles.lineNumStyle)
-	v.contentDrawer.Write(v.tui, v.styles.contentStyle)
+
+	if err = v.contentDrawer.Write(v.tui, v.styles.contentStyle); err != nil {
+		return
+	}
+
+	if err = v.lineNumberDrawer.Write(v.tui, v.styles.lineNumStyle); err != nil {
+		return
+	}
+
 	v.tui.Show()
+	return
 }

@@ -18,7 +18,9 @@ func TestContentDrawerWrite(t *testing.T) {
 	c := drawer.NewContentDrawer("test1\ntest2 test3\ttest4\ntest5", 0, 5, position)
 
 	tui.SetSize(30, 5)
-	c.Write(tui, tcell.StyleDefault)
+	if err := c.Write(tui, tcell.StyleDefault); err != nil {
+		t.Fatal(err)
+	}
 	tui.Show()
 
 	// trim end space if use heredoc

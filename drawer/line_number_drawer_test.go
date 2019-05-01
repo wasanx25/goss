@@ -20,7 +20,9 @@ func TestLineNumberDrawerWrite(t *testing.T) {
 	l := drawer.NewLineNumberDrawer(maxLine, 0, position)
 
 	tui.SetSize(5, maxLine)
-	l.Write(tui, tcell.StyleDefault)
+	if err := l.Write(tui, tcell.StyleDefault); err != nil {
+		t.Fatal(err)
+	}
 	tui.Show()
 
 	// trim end space if use heredoc
