@@ -12,12 +12,12 @@ import (
 )
 
 type Viewer struct {
-	tui              tcell.Screen
-	contentDrawer    drawer.Drawer
-	lineNumberDrawer drawer.Drawer
-	offsetter        offsetter.Offsetter
-	event            *event.Event
-	styles           *Styles
+	tui           tcell.Screen
+	contentDrawer drawer.Drawer
+	numberDrawer  drawer.Drawer
+	offsetter     offsetter.Offsetter
+	event         *event.Event
+	styles        *Styles
 }
 
 type Styles struct {
@@ -40,16 +40,16 @@ func New(text string, tui tcell.Screen, styles *Styles) *Viewer {
 	p1 := drawer.NewPositioner(rowNumMax)
 	p2 := drawer.NewPositioner(rowNumMax)
 	c := drawer.NewContentDrawer(text, defaultOffset, limitHeight, p1)
-	l := drawer.NewLineNumberDrawer(maxLine, defaultOffset, p2)
+	n := drawer.NewNumberDrawer(maxLine, defaultOffset, p2)
 	o := offsetter.NewOffsetter(defaultOffset, maxLine, limitHeight)
 
 	viewer := &Viewer{
-		tui:              tui,
-		event:            event.New(),
-		contentDrawer:    c,
-		lineNumberDrawer: l,
-		offsetter:        o,
-		styles:           styles,
+		tui:           tui,
+		event:         event.New(),
+		contentDrawer: c,
+		numberDrawer:  n,
+		offsetter:     o,
+		styles:        styles,
 	}
 
 	return viewer
@@ -62,7 +62,7 @@ func (v *Viewer) Open() (err error) {
 		return
 	}
 
-	if err = v.lineNumberDrawer.Write(v.tui, v.styles.lineNumStyle); err != nil {
+	if err = v.numberDrawer.Write(v.tui, v.styles.lineNumStyle); err != nil {
 		return
 	}
 
@@ -80,7 +80,7 @@ func (v *Viewer) Open() (err error) {
 			select {
 			case t := <-v.event.DrawCh:
 				offset := v.offsetter.UpdateAndGet(t)
-				v.lineNumberDrawer.SetOffset(offset)
+				v.numberDrawer.SetOffset(offset)
 				v.contentDrawer.SetOffset(offset)
 				if err = v.rewrite(); err != nil {
 					close(v.event.DoneCh)
@@ -111,7 +111,7 @@ func (v *Viewer) rewrite() (err error) {
 		return
 	}
 
-	if err = v.lineNumberDrawer.Write(v.tui, v.styles.lineNumStyle); err != nil {
+	if err = v.numberDrawer.Write(v.tui, v.styles.lineNumStyle); err != nil {
 		return
 	}
 

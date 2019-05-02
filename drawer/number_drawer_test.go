@@ -17,7 +17,7 @@ func TestLineNumberDrawerWrite(t *testing.T) {
 	maxLine := 12
 
 	position := drawer.NewPositioner(1)
-	l := drawer.NewLineNumberDrawer(maxLine, 0, position)
+	l := drawer.NewNumberDrawer(maxLine, 0, position)
 
 	tui.SetSize(5, maxLine)
 	if err := l.Write(tui, tcell.StyleDefault); err != nil {
