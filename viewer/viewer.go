@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/gdamore/tcell"
+	"golang.org/x/sync/errgroup"
 
 	"github.com/wasanx25/goss/drawer"
 	"github.com/wasanx25/goss/event"
@@ -58,12 +59,18 @@ func New(text string, tui tcell.Screen, styles *Styles) *Viewer {
 func (v *Viewer) Open() (err error) {
 	v.tui.SetStyle(v.styles.screenStyle)
 
-	if err = v.contentDrawer.Write(v.tui, v.styles.contentStyle); err != nil {
-		return
-	}
+	eg := errgroup.Group{}
 
-	if err = v.numberDrawer.Write(v.tui, v.styles.lineNumStyle); err != nil {
-		return
+	eg.Go(func() error {
+		return v.contentDrawer.Write(v.tui, v.styles.contentStyle)
+	})
+
+	eg.Go(func() error {
+		return v.numberDrawer.Write(v.tui, v.styles.lineNumStyle)
+	})
+
+	if err = eg.Wait(); err != nil {
+		return err
 	}
 
 	v.tui.Show()
