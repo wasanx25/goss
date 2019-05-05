@@ -90,17 +90,17 @@ func (v *Viewer) Open() (err error) {
 				v.numberDrawer.SetOffset(offset)
 				v.contentDrawer.SetOffset(offset)
 				if err = v.rewrite(); err != nil {
-					close(v.event.DoneCh)
+					close(v.event.QuitCh)
 				}
 			case <-v.event.ResizeCh:
 				v.setLimit()
 				if err = v.rewrite(); err != nil {
-					close(v.event.DoneCh)
+					close(v.event.QuitCh)
 				}
 			}
 		}
 	}()
-	<-v.event.DoneCh
+	<-v.event.QuitCh
 
 	v.tui.Fini()
 	return

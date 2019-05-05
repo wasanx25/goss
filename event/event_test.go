@@ -36,7 +36,7 @@ func TestAction(t *testing.T) {
 		t.Errorf("expected=%v, got=%v", event.PageUp, draw)
 	}
 
-	done := <-e.DoneCh
+	done := <-e.QuitCh
 	if done != struct{}{} {
 		t.Errorf("expected=%v, got=%v", struct{}{}, done)
 	}

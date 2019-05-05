@@ -8,7 +8,7 @@ type Type int
 
 type Event struct {
 	DrawCh   chan Type
-	DoneCh   chan struct{}
+	QuitCh   chan struct{}
 	ResizeCh chan struct{}
 }
 
@@ -26,7 +26,7 @@ const (
 func New() *Event {
 	return &Event{
 		DrawCh:   make(chan Type),
-		DoneCh:   make(chan struct{}),
+		QuitCh:   make(chan struct{}),
 		ResizeCh: make(chan struct{}),
 	}
 }
@@ -36,7 +36,7 @@ func (e *Event) Action(tui tcell.Screen) {
 	case *tcell.EventKey:
 		switch ev.Key() {
 		case tcell.KeyEscape:
-			e.DoneCh <- struct{}{}
+			e.QuitCh <- struct{}{}
 		case tcell.KeyCtrlB:
 			e.DrawCh <- PageUpScreen
 		case tcell.KeyCtrlF:
@@ -53,7 +53,7 @@ func (e *Event) Action(tui tcell.Screen) {
 		case 'j':
 			e.DrawCh <- PageDown
 		case 'q':
-			e.DoneCh <- struct{}{}
+			e.QuitCh <- struct{}{}
 		case 'g':
 			e.DrawCh <- PageTop
 		case 'G':
