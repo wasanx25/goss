@@ -8,5 +8,6 @@ require (
 	github.com/mattn/go-runewidth v0.0.3
 	github.com/smartystreets/assertions v0.0.0-20180927180507-b2de0cb4f26d // indirect
 	github.com/smartystreets/goconvey v0.0.0-20181108003508-044398e4856c // indirect
+	golang.org/x/sync v0.0.0-20190423024810-112230192c58
 	golang.org/x/text v0.3.0 // indirect
 )
