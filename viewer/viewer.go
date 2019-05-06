@@ -70,7 +70,7 @@ func (v *Viewer) Open() (err error) {
 	})
 
 	if err = eg.Wait(); err != nil {
-		return err
+		return
 	}
 
 	v.tui.Show()
@@ -111,17 +111,17 @@ func (v *Viewer) setLimit() {
 	v.contentDrawer.SetLimitHeight(limitHeight)
 }
 
-func (v *Viewer) rewrite() (err error) {
+func (v *Viewer) rewrite() error {
 	v.tui.Clear()
 
-	if err = v.contentDrawer.Write(v.tui, v.styles.contentStyle); err != nil {
-		return
+	if err := v.contentDrawer.Write(v.tui, v.styles.contentStyle); err != nil {
+		return err
 	}
 
-	if err = v.numberDrawer.Write(v.tui, v.styles.lineNumStyle); err != nil {
-		return
+	if err := v.numberDrawer.Write(v.tui, v.styles.lineNumStyle); err != nil {
+		return err
 	}
 
 	v.tui.Show()
-	return
+	return nil
 }
