@@ -12,6 +12,7 @@ import (
 	"github.com/wasanx25/goss/offsetter"
 )
 
+// Viewer manages draw and event
 type Viewer struct {
 	tui           tcell.Screen
 	contentDrawer drawer.Drawer
@@ -21,16 +22,24 @@ type Viewer struct {
 	styles        *Styles
 }
 
+// Styles has all styles setting
 type Styles struct {
 	screenStyle  tcell.Style
 	lineNumStyle tcell.Style
 	contentStyle tcell.Style
 }
 
-func (s *Styles) SetScreenStyle(style tcell.Style)  { s.screenStyle = style }
+// SetScreenStyle is goss main view styles
+func (s *Styles) SetScreenStyle(style tcell.Style) { s.screenStyle = style }
+
+// SetLineNumStyle is line number styles, it views left side and only integer
 func (s *Styles) SetLineNumStyle(style tcell.Style) { s.lineNumStyle = style }
+
+// SetContentStyle is main contents styles, there is setting 'text' in viewer.New
 func (s *Styles) SetContentStyle(style tcell.Style) { s.contentStyle = style }
 
+// New returns intializing Viewer pointer, there are args that want to view content for drawing
+// and Screen interface for injection and styles options
 func New(text string, tui tcell.Screen, styles *Styles) *Viewer {
 	maxLine := strings.Count(text, "\n")
 	maxStr := strconv.Itoa(maxLine)
@@ -56,6 +65,7 @@ func New(text string, tui tcell.Screen, styles *Styles) *Viewer {
 	return viewer
 }
 
+// Open is opening goss
 func (v *Viewer) Open() (err error) {
 	v.tui.SetStyle(v.styles.screenStyle)
 
@@ -70,7 +80,7 @@ func (v *Viewer) Open() (err error) {
 	})
 
 	if err = eg.Wait(); err != nil {
-		return err
+		return
 	}
 
 	v.tui.Show()
@@ -90,17 +100,17 @@ func (v *Viewer) Open() (err error) {
 				v.numberDrawer.SetOffset(offset)
 				v.contentDrawer.SetOffset(offset)
 				if err = v.rewrite(); err != nil {
-					close(v.event.DoneCh)
+					close(v.event.QuitCh)
 				}
 			case <-v.event.ResizeCh:
 				v.setLimit()
 				if err = v.rewrite(); err != nil {
-					close(v.event.DoneCh)
+					close(v.event.QuitCh)
 				}
 			}
 		}
 	}()
-	<-v.event.DoneCh
+	<-v.event.QuitCh
 
 	v.tui.Fini()
 	return
@@ -111,17 +121,17 @@ func (v *Viewer) setLimit() {
 	v.contentDrawer.SetLimitHeight(limitHeight)
 }
 
-func (v *Viewer) rewrite() (err error) {
+func (v *Viewer) rewrite() error {
 	v.tui.Clear()
 
-	if err = v.contentDrawer.Write(v.tui, v.styles.contentStyle); err != nil {
-		return
+	if err := v.contentDrawer.Write(v.tui, v.styles.contentStyle); err != nil {
+		return err
 	}
 
-	if err = v.numberDrawer.Write(v.tui, v.styles.lineNumStyle); err != nil {
-		return
+	if err := v.numberDrawer.Write(v.tui, v.styles.lineNumStyle); err != nil {
+		return err
 	}
 
 	v.tui.Show()
-	return
+	return nil
 }
